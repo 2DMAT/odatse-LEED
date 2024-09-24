@@ -1,6 +1,6 @@
 import py2dmat
 import py2dmat.algorithm.min_search
-import leed
+from odatse.extra.leed import Solver
 
 params = {
     "base": {
@@ -28,7 +28,7 @@ params = {
 
 info = py2dmat.Info(params)
 
-solver = leed.Solver(info)
+solver = Solver(info)
 runner = py2dmat.Runner(solver, info)
 alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
 alg.main()
