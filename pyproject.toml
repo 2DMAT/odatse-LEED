@@ -1,15 +1,15 @@
 [tool.poetry]
-name = "py2dmat-leed"
+name = "odatse-LEED"
 version = "1.0-dev"
-description = "LEED solver module for Py2DMAT: data-analysis software of quantum beam diffraction experiments for 2D material structure"
+description = "LEED solver module for ODAT-SE: data-analysis software of quantum beam diffraction experiments for 2D material structure"
 authors = ["2DMAT developers <2dmat-dev@issp.u-tokyo.ac.jp>"]
 license = "GPL-3.0-or-later"
 
 readme = "README.md"
-repository = "https://github.com/issp-center-dev/py2dmat-leed"
+repository = "https://github.com/2DMAT/odatse-LEED"
 
 packages = [
-  { include = "leed", from = "src" }
+  { include = "leed", from = "src", to = "odatse/extra" }
   ]
 
 [tool.poetry.dependencies]
@@ -29,7 +29,7 @@ py2dmat = "^2"
 #pynvim = "^0.4.3"
 
 [tool.poetry.scripts]
-py2dmat-leed = "leed._main:main"
+odatse-LEED = "odatse.extra.leed._main:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
