@@ -143,7 +143,7 @@ Then, run the main program. The computation time will take only a few seconds on
 
 .. code-block::
 
-   $ mpiexec -np 4 py2dmat-leed input.toml | tee log.txt
+   $ mpiexec -np 4 odatse-LEED input.toml | tee log.txt
 
 Here, the calculation using MPI parallel with 4 processes will be done.
 When executed, a folder for each MPI rank will be created in ``output``, and the results of the calculations are stored there.
@@ -192,7 +192,7 @@ Here is what it does, without further explanation.
    
     sh prepare.sh
 
-    time mpiexec -np 4 py2dmat-leed input.toml
+    time mpiexec -np 4 odatse-LEED input.toml
 
     echo diff output/ColorMap.txt ref_ColorMap.txt
     res=0

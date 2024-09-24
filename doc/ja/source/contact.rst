@@ -1,15 +1,15 @@
 お問い合わせ
 =========================================
 
-2DMAT-LEED に関するお問い合わせはこちらにお寄せください。
+odatse-LEED に関するお問い合わせはこちらにお寄せください。
 
 - バグ報告
 
-  2DMAT-LEED のバグ関連の報告は `GitHubのIssues <https://github.com/issp-center-dev/2DMAT/releases>`_ で受け付けています。
+  odatse-LEED のバグ関連の報告は `GitHubのIssues <https://github.com/2DMAT/odatse-LEED/issues>`_ で受け付けています。
 
   バグを早期に解決するため、報告時には次のガイドラインに従ってください。
      
-     - 使用している 2DMAT-LEED のバージョンを指定してください。
+     - 使用している ODAT-SE および odatse-LEED のバージョンを指定してください。
 
      - インストールに問題がある場合には、使用しているオペレーティングシステムとコンパイラの情報についてお知らせください。
 

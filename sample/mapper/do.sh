@@ -2,7 +2,7 @@
 
 sh ./prepare.sh
 
-time mpiexec -np 4 py2dmat-leed input.toml
+time mpiexec -np 4 odatse-LEED input.toml
 
 
 result=output/ColorMap.txt

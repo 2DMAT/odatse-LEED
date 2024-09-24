@@ -1,7 +1,7 @@
 Input and output
 ================================
 
-``2DMAT-LEED`` module is a ``Solver`` which calculates the Rocking curve from atomic positions etc., using ``SATLEED``, and returns the deviation from the experimental Rocking curve as :math:`f(x)`.
+``odatse-LEED`` module is a ``Solver`` which calculates the Rocking curve from atomic positions etc., using ``SATLEED``, and returns the deviation from the experimental Rocking curve as :math:`f(x)`.
 
 In this section, the input parameters, the input data, and the output data are explained.
 The input parameters are taken from the ``solver`` entry of the ``Info`` class.
@@ -46,7 +46,7 @@ Target reference file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The file containing the data to be targeted to fit. Edit ``tleed4.i`` in ``path_to_base_dir`` in the [``reference``] section.
 Add the number you want to optimize to ``optxxx`` (where xxx is a three-digit number in the format 000, 001, 002, ...). (where xxx is a three-digit integer in the form 000, 001, 002, ...).
-Note that the number of xxx must match the order and number of variables in the list of ``py2dmat`` variables to be optimized.
+Note that the number of xxx must match the order and number of variables in the list of ``odatse-LEED`` variables to be optimized.
 Note that if IFLAG and LSFLAG are not set to 0, the satleed side is also optimized.
 
 An example file is shown below.

@@ -20,7 +20,7 @@ import py2dmat
 import py2dmat.mpi
 import py2dmat.util.toml
 
-from leed import Solver
+from odatse.extra.leed import Solver
 
 def main():
     import argparse
