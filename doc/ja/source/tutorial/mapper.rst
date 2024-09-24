@@ -136,7 +136,7 @@
 
 .. code-block::
 
-    $ mpiexec -np 4 py2dmat-leed input.toml | tee log.txt
+    $ mpiexec -np 4 odatse-LEED input.toml | tee log.txt
 
 ここではプロセス数4のMPI並列を用いた計算を行っています。
 実行すると、 ``output`` ディレクトリとその下に各ランクのフォルダが作成され、計算結果が出力されます。また、以下の様なログが標準出力に表示されます。
@@ -182,7 +182,7 @@
    
     sh prepare.sh
 
-    time mpiexec -np 4 py2dmat-leed input.toml
+    time mpiexec -np 4 odatse-LEED input.toml
 
     echo diff output/ColorMap.txt ref_ColorMap.txt
     res=0

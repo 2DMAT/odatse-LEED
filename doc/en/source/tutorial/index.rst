@@ -6,13 +6,13 @@
 Tutorials
 ================================
 
-``2DMAT-LEED`` provides a direct problem solver for 2DMAT that uses ``SATLEED`` developed by M. A. Van Hove for the analyses of the low-energy electron diffraction (LEED) data.
+``odatse-LEED`` provides a direct problem solver for ODAT-SE that uses ``SATLEED`` developed by M. A. Van Hove for the analyses of the low-energy electron diffraction (LEED) data.
 ``SATLEED`` calculates diffraction data for given atomic positions.
 Regarding this as a direct problem, it corresponds to an inverse problem to find optimal atomic coordinates that reproduce the diffraction data obtained from the experiment.
-2DMAT provides a framework to solve these inverse problems.
+ODAT-SE provides a framework to solve these inverse problems.
 
-In this tutorial, we will instruct how to use 2DMAT-LEED to find optimal configuration by the grid search (mapper).
-We use ``py2dmat-leed`` program included in 2DMAT-LEED with input files in TOML format.
+In this tutorial, we will instruct how to use odatse-LEED to find optimal configuration by the grid search (mapper).
+We use ``odatse-LEED`` program included in odatse-LEED with input files in TOML format.
 Next, we will explain how to write your own main program for analyses.
 
 
