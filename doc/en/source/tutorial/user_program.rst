@@ -1,7 +1,7 @@
 Analyses by user programs
 ================================================================
 
-In this tutorial, we will write a user program using 2DMAT-LEED module and perform analyese. As an example, we adopt Nelder-Mead method for the inverse problem algorithm.
+In this tutorial, we will write a user program using odatse-LEED module and perform analyese. As an example, we adopt Nelder-Mead method for the inverse problem algorithm.
 
 
 Location of the sample files
@@ -41,18 +41,18 @@ The following sections describe these files and then show the actual calculation
 Description of main program
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``simple.py`` is a simple program for the analyses using 2DMAT-LEED module.
+``simple.py`` is a simple program for the analyses using odatse-LEED module.
 The entire source file is shown as follows:
 
 .. code-block:: python
 
     import py2dmat
     import py2dmat.algorithm.min_search
-    import leed
+    from odatse.extra.leed import Solver
     
     info = py2dmat.Info.from_file("input.toml")
     
-    solver = leed.Solver(info)
+    solver = Solver(info)
     runner = py2dmat.Runner(solver, info)
     alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
     alg.main()
@@ -60,11 +60,11 @@ The entire source file is shown as follows:
 
 At the beginning of the program, the required modules are imported as listed below.
 
-- ``py2dmat`` for the main module of 2DMAT.
+- ``py2dmat`` for the main module of ODAT-SE.
 
 - ``py2dmat.algorithm.min_search`` for the module of the inverse problem algorithm used in this tutorial.
 
-- ``leed`` for the direct problem solver module.
+- ``odatse.extra.leed`` for the direct problem solver module.
 
 Next, the instances of the classes are created.
 
@@ -72,9 +72,9 @@ Next, the instances of the classes are created.
 
   This class is for storing the parameters. It is created by calling a class method ``from_file`` with a path to TOML file as an argument.
 
-- ``leed.Solver`` class
+- ``odatse.extra.leed.Solver`` class
 
-  This class is for the direct problem solver of the 2DMAT-LEED module. It is created by passing an instance of Info class.
+  This class is for the direct problem solver of the odatse-LEED module. It is created by passing an instance of Info class.
 
 - ``py2dmat.Runner`` class
 
@@ -93,7 +93,7 @@ In the above program, the input parameters are read from a file in TOML format. 
 
     import py2dmat
     import py2dmat.algorithm.min_search
-    import leed
+    from odatse.extra.leed import Solver
     
     params = {
         "base": {
@@ -121,7 +121,7 @@ In the above program, the input parameters are read from a file in TOML format. 
     
     info = py2dmat.Info(params)
     
-    solver = leed.Solver(info)
+    solver = Solver(info)
     runner = py2dmat.Runner(solver, info)
     alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
     alg.main()
