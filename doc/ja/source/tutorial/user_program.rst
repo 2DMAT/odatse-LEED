@@ -43,40 +43,40 @@
 
 .. code-block:: python
 
-    import py2dmat
-    import py2dmat.algorithm.min_search
-    from odatse.extra.leed import Solver
+    import odatse
+    import odatse.algorithm.min_search
+    from odatse.extra.LEED import Solver
     
-    info = py2dmat.Info.from_file("input.toml")
+    info = odatse.Info.from_file("input.toml")
     
     solver = Solver(info)
-    runner = py2dmat.Runner(solver, info)
-    alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
+    runner = odatse.Runner(solver, info)
+    alg = odatse.algorithm.min_search.Algorithm(info, runner)
     alg.main()
 
 プログラムではまず、必要なモジュールを import します。
 
-- 2DMAT のメインモジュール ``py2dmat``
+- ODAT-SE のメインモジュール ``odatse``
 
-- 今回利用する逆問題解析アルゴリズム ``py2dmat.algorithm.min_search``
+- 今回利用する逆問題解析アルゴリズム ``odatse.algorithm.min_search``
 
-- 順問題ソルバーモジュール ``odatse.extra.leed``
+- 順問題ソルバーモジュール ``odatse.extra.LEED``
 
 次に、解析で利用するクラスのインスタンスを作成します。
 
-- ``py2dmat.Info`` クラス
+- ``odatse.Info`` クラス
 
   パラメータを格納するクラスです。 ``from_file`` クラスメソッドに TOML ファイルのパスを渡して作成することができます。
 
-- ``odatse.extra.leed.Solver`` クラス
+- ``odatse.extra.LEED.Solver`` クラス
 
   odatse-LEED モジュールの順問題ソルバーです。Info クラスのインスタンスを渡して作成します。
 
-- ``py2dmat.Runner`` クラス
+- ``odatse.Runner`` クラス
 
   順問題ソルバーと逆問題解析アルゴリズムを繋ぐクラスです。Solver クラスのインスタンスおよび Info クラスのパラメータを渡して作成します。
 
-- ``py2dmat.algorithm.min_search.Algorithm`` クラス
+- ``odatse.algorithm.min_search.Algorithm`` クラス
 
   逆問題解析アルゴリズムのクラスです。ここでは Nelder-Mead法による最適化アルゴリズムのクラスモジュール ``min_search`` を利用します。Runner のインスタンスをわたして作成します。
 
@@ -87,9 +87,9 @@ Solver, Runner, Algorithm の順にインスタンスを作成した後、Algori
 
 .. code-block:: python
 
-    import py2dmat
-    import py2dmat.algorithm.min_search
-    import leed
+    import odatse
+    import odatse.algorithm.min_search
+    from odatse.extra.LEED import Solver
     
     params = {
         "base": {
@@ -115,11 +115,11 @@ Solver, Runner, Algorithm の順にインスタンスを作成した後、Algori
         },
     }
     
-    info = py2dmat.Info(params)
+    info = odatse.Info(params)
     
-    solver = leed.Solver(info)
-    runner = py2dmat.Runner(solver, info)
-    alg = py2dmat.algorithm.min_search.Algorithm(info, runner)
+    solver = Solver(info)
+    runner = odatse.Runner(solver, info)
+    alg = odatse.algorithm.min_search.Algorithm(info, runner)
     alg.main()
 
 dict 形式のパラメータを渡して Info クラスのインスタンスを作成します。

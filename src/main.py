@@ -16,5 +16,5 @@
 
 if __name__ == "__main__":
     # sys.path[0] is this directory (2DMAT/src)
-    from odatse.extra.leed._main import main
+    from LEED._main import main
     main()
