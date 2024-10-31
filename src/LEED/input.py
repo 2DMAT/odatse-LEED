@@ -26,11 +26,24 @@ class Input(object):
     dimension: int
 
     def __init__(self, info):
+        """
+        Initialize the Input class with the given information.
+
+        Parameters:
+        info (object): An object containing base information with keys 'dimension', 'root_dir', and 'output_dir'.
+        """
         self.dimension = info.base["dimension"]
         self.root_dir = info.base["root_dir"]
         self.output_dir = info.base["output_dir"]
 
     def prepare(self, x: np.ndarray, args):
+        """
+        Prepare the input by deleting output files and generating a fit file.
+
+        Parameters:
+        x (np.ndarray): A numpy array of variables.
+        args (tuple): Additional arguments (currently not used).
+        """
         x_list = x
         #step, iset = args
         #extra = iset > 0
@@ -45,13 +58,20 @@ class Input(object):
         self._write_fit_file(x_list)
 
     def _write_fit_file(self, variables):
-        with open("tleed4.i", "r") as fr:
+        """
+        Write the fit file with the given variables.
+
+        Parameters:
+        variables (np.ndarray): A numpy array of variables to be written into the fit file.
+        """
+        file_name = "tleed4.i"
+        with open(file_name, "r") as fr:
             contents = fr.read()
         for idx, variable in enumerate(variables):
             # FORTRAN format: F7.6
-            svariable = str(variable).zfill(6)[:6]
+            str_variable = str(variable).zfill(6)[:6]
             contents = contents.replace(
-                "opt{}".format(str(idx).zfill(3)), svariable
+                "opt{}".format(str(idx).zfill(3)), str_variable
             )
-        with open("tleed4.i", "w") as writer:
+        with open(file_name, "w") as writer:
             writer.write(contents)

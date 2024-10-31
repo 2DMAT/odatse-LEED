@@ -30,17 +30,37 @@ from odatse import exception
 from .input import Input
 
 class Solver(odatse.solver.SolverBase):
+    """
+    Solver class for LEED (Low-Energy Electron Diffraction) analysis.
+    Inherits from odatse.solver.SolverBase.
+    """
     path_to_solver: Path
     dimension: int
 
     def __init__(self, info: odatse.Info):
+        """
+        Initializes the Solver instance.
+
+        Args:
+            info (odatse.Info): Information object containing solver configuration.
+        """
         super().__init__(info)
 
         self._name = "leed"
         info_s = info.solver
 
-        # Check keywords
         def check_keywords(key, segment, registered_list):
+            """
+            Checks if a keyword is in the registered list.
+
+            Args:
+                key (str): The keyword to check.
+                segment (str): The segment name.
+                registered_list (list): List of registered keywords.
+
+            Raises:
+                RuntimeError: If the keyword is not in the registered list.
+            """
             if (key in registered_list) is False:
                 msg = "Error: {} in {} is not correct keyword.".format(key, segment)
                 raise RuntimeError(msg)
@@ -81,6 +101,18 @@ class Solver(odatse.solver.SolverBase):
         self.input = Input(info)
 
     def evaluate(self, x: np.ndarray, args = (), nprocs: int = 1, nthreads: int = 1) -> float:
+        """
+        Evaluates the solver with the given parameters.
+
+        Args:
+            x (np.ndarray): Input array.
+            args (tuple, optional): Additional arguments. Defaults to ().
+            nprocs (int, optional): Number of processes. Defaults to 1.
+            nthreads (int, optional): Number of threads. Defaults to 1.
+
+        Returns:
+            float: The result of the evaluation.
+        """
         self.prepare(x, args)
         cwd = os.getcwd()
         os.chdir(self.work_dir)
@@ -90,15 +122,35 @@ class Solver(odatse.solver.SolverBase):
         return result
 
     def prepare(self, x: np.ndarray, args) -> None:
+        """
+        Prepares the solver for evaluation.
+
+        Args:
+            x (np.ndarray): Input array.
+            args (tuple): Additional arguments.
+        """
         self.work_dir = self.proc_dir
         for dir in [self.path_to_base_dir]:
             copy_tree(os.path.join(self.root_dir, dir), os.path.join(self.work_dir))
         self.input.prepare(x, args)
 
     def run(self, nprocs: int = 1, nthreads: int = 1) -> None:
+        """
+        Runs the solver.
+
+        Args:
+            nprocs (int, optional): Number of processes. Defaults to 1.
+            nthreads (int, optional): Number of threads. Defaults to 1.
+        """
         self._run_by_subprocess([str(self.path_to_solver)])
 
     def _run_by_subprocess(self, command: List[str]) -> None:
+        """
+        Runs a command using subprocess.
+
+        Args:
+            command (List[str]): Command to run.
+        """
         with open("stdout", "w") as fi:
             subprocess.run(
                 command,
@@ -108,7 +160,15 @@ class Solver(odatse.solver.SolverBase):
             )
 
     def get_results(self) -> float:
-        # Get R-factor
+        """
+        Retrieves the results from the solver.
+
+        Returns:
+            float: The R-factor result.
+
+        Raises:
+            RuntimeError: If the R-factor cannot be found.
+        """
         rfactor = -1.0
         filename = os.path.join(self.work_dir, "search.s")
         with open(filename, "r") as fr:
