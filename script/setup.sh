@@ -2,9 +2,9 @@
 
 set -e
 
-#if [ ! -e leedsatl.zip ]; then
-#  wget http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip -O leedsatl.zip
-#fi
+if [ ! -e leedsatl.zip ]; then
+  wget http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip -O leedsatl.zip
+fi
 rm -rf leedsatl
 unzip leedsatl.zip -d leedsatl
 cd leedsatl
