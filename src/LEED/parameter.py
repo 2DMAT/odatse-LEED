@@ -20,12 +20,40 @@ from pydantic import BaseModel, PositiveInt, ValidationError, Field, field_valid
 from numbers import Number
 
 class SolverConfig(BaseModel):
+    """
+    Configuration for the solver
+
+    Attributes
+    ----------
+    path_to_solver : str
+        Path to the satl2 solver executable.
+    """
     path_to_solver: str = "satl2.exe"
     
 class SolverReference(BaseModel):
+    """
+    Reference data for the solver
+
+    Attributes
+    ----------
+    path_to_base_dir : str
+        Path to the directory containing basic data.
+    """
     path_to_base_dir: str = "base"
 
 class SolverInfo(BaseModel):
+    """
+    Parameters for the LEED solver
+
+    Attributes
+    ----------
+    name : str
+        Name of the solver.
+    config : SolverConfig
+        Configuration for the solver.
+    reference : SolverReference
+        Reference data for the solver
+    """
     name: Optional[str]
     config: SolverConfig
     reference: SolverReference
