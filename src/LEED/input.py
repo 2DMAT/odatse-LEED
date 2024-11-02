@@ -29,8 +29,10 @@ class Input(object):
         """
         Initialize the Input class with the given information.
 
-        Parameters:
-        info (object): An object containing base information with keys 'dimension', 'root_dir', and 'output_dir'.
+        Parameters
+        ----------
+        info : odatse.Info
+            An object containing base information.
         """
         self.dimension = info.base["dimension"]
         self.root_dir = info.base["root_dir"]
@@ -40,9 +42,12 @@ class Input(object):
         """
         Prepare the input by deleting output files and generating a fit file.
 
-        Parameters:
-        x (np.ndarray): A numpy array of variables.
-        args (tuple): Additional arguments (currently not used).
+        Parameters
+        ----------
+        x : np.ndarray
+            A numpy array of variables.
+        args : tuple
+            Additional arguments.
         """
         x_list = x
         #step, iset = args
@@ -61,8 +66,10 @@ class Input(object):
         """
         Write the fit file with the given variables.
 
-        Parameters:
-        variables (np.ndarray): A numpy array of variables to be written into the fit file.
+        Parameters
+        ----------
+        variables : np.ndarray
+            A numpy array of variables to be written into the fit file.
         """
         file_name = "tleed4.i"
         with open(file_name, "r") as fr:
