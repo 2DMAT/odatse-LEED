@@ -54,7 +54,7 @@ class SolverInfo(BaseModel):
     reference : SolverReference
         Reference data for the solver
     """
-    name: Optional[str]
+    name: Optional[str] = "leed"
     config: SolverConfig
     reference: SolverReference
 

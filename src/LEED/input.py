@@ -34,7 +34,7 @@ class Input(object):
         info : odatse.Info
             An object containing base information.
         """
-        self.dimension = info.base["dimension"]
+        self.dimension = info.solver.get("dimension", None) or info.base.get("dimension", None)
         self.root_dir = info.base["root_dir"]
         self.output_dir = info.base["output_dir"]
 
