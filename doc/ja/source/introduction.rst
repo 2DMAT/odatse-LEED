@@ -54,7 +54,7 @@ Bibtex::
 
 odatse-LEED
 
-- v1.0.0: 2024-XX-XX
+- v1.0-alpha: 2024-XX-XX
 
 ODAT-SE
 
@@ -73,7 +73,7 @@ ODAT-SE
 --------------------------------
 ODAT-SE, odatse-LEED, 2DMATは以下のメンバーで開発しています.
 
-- ODAT-SE v3.0.0 -, odatse-LEED v1.0.0 -
+- ODAT-SE v3.0.0 -, odatse-LEED v1.0-alpha -
 
   - 本山 裕一 (東京大学 物性研究所)
   - 吉見 一慶 (東京大学 物性研究所)
