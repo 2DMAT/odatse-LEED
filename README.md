@@ -8,9 +8,8 @@ SATLEED is a software package developed by M.A. Van Hove for the analyses of LEE
 ## Prerequists
 
 - Required
-  - python >= 3.6.8
+  - python >= 3.9
   - numpy >= 1.14
-  - tomli >= 1.2.0
   - pydantic >= 2.0
   - ODAT-SE >= 3.0
   - SATLEED
@@ -23,7 +22,7 @@ SATLEED is a software package developed by M.A. Van Hove for the analyses of LEE
 - From Source (For developers)
   1. update `pip >= 19` by `python3 -m pip install -U pip`
   2. `python3 -m pip install ODATSE_LEED_ROOT_DIRECTORY` to install `odatse-LEED` package and `odatse-LEED` command
-    - `ODATSE_LEED_ROOT_DIRECTORY` means the directory including this `README.md` file.
+    - `ODATSE_LEED_ROOT_DIRECTORY` points to the directory including this `README.md` file.
 
 ## Simple Usage
 
