@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ユーザープログラムによる解析 &#8212; ODAT-SE solver module: odatse-LEED 1.0-dev ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
+    <script src="../_static/documentation_options.js?v=3b7831b5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="入出力" href="../solver.html" />
+    <link rel="prev" title="グリッド型探索" href="mapper.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>ODAT-SE solver module: odatse-LEED 1.0-dev ドキュメント</span></a></h1>
+        <h2 class="heading"><span>ユーザープログラムによる解析</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="mapper.html">グリッド型探索</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">コンテンツ</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="../solver.html">入出力</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="id1">
+<h1>ユーザープログラムによる解析<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>ここでは、odatse-LEED モジュールを用いたユーザープログラムを作成し、解析を行う方法を説明します。逆問題アルゴリズムは例としてNelder-Mead法を用います。</p>
+<section id="id2">
+<h2>サンプルファイルの場所<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>サンプルファイルは <code class="docutils literal notranslate"><span class="pre">sample/user_program</span></code> にあります。
+フォルダには以下のファイルが格納されています。</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">simple.py</span></code></p>
+<p>メインプログラム。パラメータを <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> ファイルから読み込んで解析を行う。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input.toml</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">simple.py</span></code> で利用する入力パラメータファイル</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base/</span></code></p>
+<p>メインプログラムでの計算を進めるための参照ファイルを格納するディレクトリ。参照ファイルは <code class="docutils literal notranslate"><span class="pre">exp.d</span></code>, <code class="docutils literal notranslate"><span class="pre">rfac.d</span></code>, <code class="docutils literal notranslate"><span class="pre">short.t</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed.o</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code> .</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ref.txt</span></code></p>
+<p>本チュートリアルで求めたい回答が記載されたファイル</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">simple2.py</span></code></p>
+<p>メインプログラムの別バージョン。パラメータを dict 形式でスクリプト中に埋め込んでいる。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare.sh</span></code>, <code class="docutils literal notranslate"><span class="pre">do.sh</span></code></p>
+<p>本チュートリアルを一括計算するために準備されたスクリプト</p>
+</li>
+</ul>
+<p>以下、これらのファイルについて説明したのち、実際の計算結果を紹介します。</p>
+</section>
+<section id="id3">
+<h2>プログラムの説明<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">simple.py</span></code> は odatse-LEED モジュールを用いて解析を行うシンプルなプログラムです。
+プログラムの全体を以下に示します。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">odatse</span>
+<span class="kn">import</span> <span class="nn">odatse.algorithm.min_search</span>
+<span class="kn">from</span> <span class="nn">odatse.extra.LEED</span> <span class="kn">import</span> <span class="n">Solver</span>
+
+<span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;input.toml&quot;</span><span class="p">)</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Runner</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">min_search</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">runner</span><span class="p">)</span>
+<span class="n">alg</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>プログラムではまず、必要なモジュールを import します。</p>
+<ul class="simple">
+<li><p>ODAT-SE のメインモジュール <code class="docutils literal notranslate"><span class="pre">odatse</span></code></p></li>
+<li><p>今回利用する逆問題解析アルゴリズム <code class="docutils literal notranslate"><span class="pre">odatse.algorithm.min_search</span></code></p></li>
+<li><p>順問題ソルバーモジュール <code class="docutils literal notranslate"><span class="pre">odatse.extra.LEED</span></code></p></li>
+</ul>
+<p>次に、解析で利用するクラスのインスタンスを作成します。</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.Info</span></code> クラス</p>
+<p>パラメータを格納するクラスです。 <code class="docutils literal notranslate"><span class="pre">from_file</span></code> クラスメソッドに TOML ファイルのパスを渡して作成することができます。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.extra.LEED.Solver</span></code> クラス</p>
+<p>odatse-LEED モジュールの順問題ソルバーです。Info クラスのインスタンスを渡して作成します。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.Runner</span></code> クラス</p>
+<p>順問題ソルバーと逆問題解析アルゴリズムを繋ぐクラスです。Solver クラスのインスタンスおよび Info クラスのパラメータを渡して作成します。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odatse.algorithm.min_search.Algorithm</span></code> クラス</p>
+<p>逆問題解析アルゴリズムのクラスです。ここでは Nelder-Mead法による最適化アルゴリズムのクラスモジュール <code class="docutils literal notranslate"><span class="pre">min_search</span></code> を利用します。Runner のインスタンスをわたして作成します。</p>
+</li>
+</ul>
+<p>Solver, Runner, Algorithm の順にインスタンスを作成した後、Algorithm クラスの <code class="docutils literal notranslate"><span class="pre">main()</span></code> メソッドを呼んで解析を行います。</p>
+<p>上記のプログラムでは、入力パラメータを TOML形式のファイルから読み込む形ですが、パラメータを dict 形式で渡すこともできます。
+<code class="docutils literal notranslate"><span class="pre">simple2.py</span></code> はパラメータをプログラム中に埋め込む形式で記述したものです。以下にプログラムの全体を記載します。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">odatse</span>
+<span class="kn">import</span> <span class="nn">odatse.algorithm.min_search</span>
+<span class="kn">from</span> <span class="nn">odatse.extra.LEED</span> <span class="kn">import</span> <span class="n">Solver</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;output_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;solver&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;path_to_solver&quot;</span><span class="p">:</span> <span class="s2">&quot;./leedsatl/satl2.exe&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;path_to_base_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;./base&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;algorithm&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;label_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;param&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;min_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span>
+            <span class="s2">&quot;max_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">],</span>
+            <span class="s2">&quot;initial_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+        <span class="p">},</span>
+
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Runner</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">min_search</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">runner</span><span class="p">)</span>
+<span class="n">alg</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>dict 形式のパラメータを渡して Info クラスのインスタンスを作成します。
+同様に、パラメータをプログラム内で生成して渡すこともできます。</p>
+</section>
+<section id="id4">
+<h2>入力ファイルの説明<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>メインプログラム用の入力ファイル <code class="docutils literal notranslate"><span class="pre">input.toml</span></code> に、順問題ソルバーおよび逆問題解析アルゴリズムのパラメータを指定します。 <code class="docutils literal notranslate"><span class="pre">base</span></code> および <code class="docutils literal notranslate"><span class="pre">solver</span></code> セクションの内容は前述のグリッド型探索の場合と同じです。
+逆問題解析アルゴリズムについては、Nelder-Mead法のパラメータを algorithm.param の項目に指定します。なお、アルゴリズムの種類を指定する <code class="docutils literal notranslate"><span class="pre">algorithm.name</span></code> パラメータの値は無視されます。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">min_list</span></code>, <code class="docutils literal notranslate"><span class="pre">max_list</span></code> は探索領域の指定で、領域の下端と上端を変数についてのリストの形式で与えます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">initial_list</span></code> には初期値を指定します。</p></li>
+</ul>
+</section>
+<section id="id5">
+<h2>計算実行<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>最初にサンプルファイルが置いてあるフォルダへ移動します(以下、本ソフトウェアをダウンロードしたデ
+ィレクトリ直下にいることを仮定します).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd sample/user_program
+</pre></div>
+</div>
+<p>グリッド探索の例でコンパイルした SATLEED プログラムをコピーします。作成していない場合は、
+<code class="docutils literal notranslate"><span class="pre">sample/mapper</span></code> ディレクトリの中で <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">setup.sh</span></code> を実行し、 <code class="docutils literal notranslate"><span class="pre">leedsatl/satl1.exe</span></code> と <code class="docutils literal notranslate"><span class="pre">leedsatl/satl2.exe</span></code> を作ります。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir leedsatl
+$ cp ../mapper/leedsatl/satl2.exe ./leedsatl
+</pre></div>
+</div>
+<p>メインプログラムを実行します。(計算時間は通常のPCで数秒程度で終わります。)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 simple.py | tee log.txt
+</pre></div>
+</div>
+<p>実行すると、以下の様な出力がされます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Optimization</span> <span class="n">terminated</span> <span class="n">successfully</span><span class="o">.</span>
+         <span class="n">Current</span> <span class="n">function</span> <span class="n">value</span><span class="p">:</span> <span class="mf">0.157500</span>
+         <span class="n">Iterations</span><span class="p">:</span> <span class="mi">29</span>
+         <span class="n">Function</span> <span class="n">evaluations</span><span class="p">:</span> <span class="mi">63</span>
+<span class="n">iteration</span><span class="p">:</span> <span class="mi">29</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">allvecs</span><span class="p">):</span> <span class="mi">30</span>
+<span class="n">step</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
+<span class="n">step</span><span class="p">:</span> <span class="mi">1</span>
+<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
+<span class="n">step</span><span class="p">:</span> <span class="mi">2</span>
+<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
+<span class="n">step</span><span class="p">:</span> <span class="mi">3</span>
+<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
+<span class="n">step</span><span class="p">:</span> <span class="mi">4</span>
+<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
+<span class="n">step</span><span class="p">:</span> <span class="mi">5</span>
+<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.0375</span>  <span class="o">-</span><span class="mf">0.05625</span><span class="p">]</span>
+<span class="n">step</span><span class="p">:</span> <span class="mi">6</span>
+<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.0375</span>  <span class="o">-</span><span class="mf">0.05625</span><span class="p">]</span>
+<span class="n">step</span><span class="p">:</span> <span class="mi">7</span>
+<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.0375</span>  <span class="o">-</span><span class="mf">0.05625</span><span class="p">]</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">z1</span></code>, <code class="docutils literal notranslate"><span class="pre">z2</span></code> に各ステップでの候補パラメータと、その時の <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> が出力されます。
+最終的に推定されたパラメータは、 <code class="docutils literal notranslate"><span class="pre">output/res.dat</span></code> に出力されます。今の場合、</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fx</span> <span class="o">=</span> <span class="mf">0.1575</span>
+<span class="n">z1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.01910402104258537</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="mf">0.10217590294778345</span>
+</pre></div>
+</div>
+<p>となります。リファレンス ref.txt が再現されていることが分かります。</p>
+<p>なお、一連の計算を行う <code class="docutils literal notranslate"><span class="pre">do.sh</span></code> スクリプトが用意されています。</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="mapper.html">グリッド型探索</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">コンテンツ</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="../solver.html">入出力</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>
