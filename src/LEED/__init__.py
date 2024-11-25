@@ -16,4 +16,4 @@
 
 from .leed import Solver
 
-__version__ = "1.0-dev"
+__version__ = "1.0-alpha"
