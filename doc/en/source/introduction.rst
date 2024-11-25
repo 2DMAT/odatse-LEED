@@ -54,11 +54,11 @@ Version Information
 
 odatse-LEED
 
-- v1.0.0: 2024-XX-XX
+- v1.0-alpha: 2024-11-25
 
 ODAT-SE
 
-- v3.0.0: 2024-XX-XX
+- v3.0.0: 2024-11-25
 
 2DMAT
 
@@ -74,7 +74,7 @@ Main developers
 
 ODAT-SE, odatse-LEED, and 2DMAT have been developed by following members.
 
-- ODAT-SE v3.0.0 -, odatse-LEED v1.0.0 -
+- ODAT-SE v3.0.0 -, odatse-LEED v1.0-alpha -
 
   - Y. Motoyama (The Institute for Solid State Physics, The University of Tokyo)
   - K. Yoshimi (The Institute for Solid State Physics, The University of Tokyo)
