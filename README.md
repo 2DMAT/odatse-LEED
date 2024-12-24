@@ -1,6 +1,6 @@
 # odatse-LEED: solver module for analyses of LEED data
 
-Open Data Analysis Tool for Science and Engineering (ODAT-SE) is a framework for applying a search algorithm to a direct problem solver to find the optimal solution. It has been developed by the name 2DMAT, and since version 3.0, it is organized as an open platform for data analysis by modularizing direct problem solvers and search algorithms.
+[Open Data Analysis Tool for Science and Engineering (ODAT-SE)](https://github.com/issp-center-dev/ODAT-SE) is a framework for applying a search algorithm to a direct problem solver to find the optimal solution. It has been developed by the name 2DMAT, and since version 3.0, it is organized as an open platform for data analysis by modularizing direct problem solvers and search algorithms.
 
 SATLEED is a software package developed by M.A. Van Hove for the analyses of LEED, which calculates the Rocking curve from the atomic positions and other parameters, and evaluate the deviations from the Rocking curve obtained from the experiments. odatse-LEED is an adaptor library to use SATLEED as a direct problem solver of ODAT-SE.
 
