@@ -1,0 +1,23 @@
+diff -rNu src.orig/satl_sub.f src.new/satl_sub.f
+--- src.orig/satl_sub.f	2025-03-17 17:06:31.440502366 +0900
++++ src.new/satl_sub.f	2025-03-17 16:38:03.471530448 +0900
+@@ -6940,7 +6940,8 @@
+ C==============================================================================
+       SUBROUTINE FORSPLINE(NEL,L1,NPSI,PHSS,ES,PHSS2)
+       DIMENSION PHSS(NPSI,80),PHSS2(NPSI,80),ES(NPSI)
+-      DIMENSION PHSL(90),PHSL2(90)
++c      DIMENSION PHSL(90),PHSL2(90)
++      DIMENSION PHSL(NPSI),PHSL2(NPSI)
+ C
+ C natural spline
+       YP1=1.E10
+@@ -10082,7 +10083,8 @@
+ C
+       COMPLEX CI,DEL(16),CA,AF(L1),CAF(L1),TSF0(6,16),TSF(6,16)
+       DIMENSION PHSS(NPSI,80),PHSS2(NPSI,80),ES(NPSI),PPP(NN1,NN2,NN3)
+-      DIMENSION PHS(16),PHSL(90),PHSL2(90)
++c      DIMENSION PHS(16),PHSL(90),PHSL2(90)
++      DIMENSION PHS(16),PHSL(NPSI),PHSL2(NPSI)
+       DIMENSION DR0(5),DRPER(5),DRPAR(5),IT(5)
+ C
+ C
