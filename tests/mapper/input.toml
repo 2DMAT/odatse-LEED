@@ -5,9 +5,13 @@ output_dir = "output"
 [solver]
 name = "leed"
 [solver.config]
-path_to_solver = "../bin/satl2.exe"
+path_to_first_solver = "../bin/satl1.exe"
+path_to_second_solver = "../bin/satl2.exe"
+[solver.param]
+string_list = ["opt000", "opt001"]
 [solver.reference]
 path_to_base_dir = "./base"
+rfactor = "satleed"
 
 [algorithm]
 name = "mapper"

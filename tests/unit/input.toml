@@ -4,10 +4,15 @@ output_dir = "output"
 
 [solver]
 name = "leed"
+#remove_work_dir = false
+#use_tmpdir = false
 [solver.config]
-path_to_solver = "dummy.exe"
+path_to_first_solver = "dummy.exe"
+path_to_second_solver = "dummy.exe"
 [solver.reference]
 path_to_base_dir = "base_dir"
+[solver.param]
+string_list = ["opt000", "opt001"]
 
 [algorithm]
 name = "mapper"
