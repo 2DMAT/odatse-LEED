@@ -19,15 +19,11 @@
 
 - ``base/``
 
-  メインプログラムでの計算を進めるための参照ファイルを格納するディレクトリ。参照ファイルは ``exp.d``, ``rfac.d``, ``short.t``, ``tleed.o``, ``tleed4.i``, ``tleed5.i`` .
+  メインプログラムでの計算を進めるための参照ファイルを格納するディレクトリ。参照ファイルは ``exp.d``, ``rfac.d``, ``tleed4.i``, ``tleed5.i`` .
 
 - ``ref.txt``
 
-  本チュートリアルで求めたい回答が記載されたファイル
-
-- ``simple2.py``
-
-  メインプログラムの別バージョン。パラメータを dict 形式でスクリプト中に埋め込んでいる。
+  本チュートリアルで得られる結果の比較データ
 
 - ``prepare.sh``, ``do.sh``
 
@@ -83,78 +79,31 @@
 Solver, Runner, Algorithm の順にインスタンスを作成した後、Algorithm クラスの ``main()`` メソッドを呼んで解析を行います。
 
 上記のプログラムでは、入力パラメータを TOML形式のファイルから読み込む形ですが、パラメータを dict 形式で渡すこともできます。
-``simple2.py`` はパラメータをプログラム中に埋め込む形式で記述したものです。以下にプログラムの全体を記載します。
 
-.. code-block:: python
-
-    import odatse
-    import odatse.algorithm.min_search
-    from odatse.extra.LEED import Solver
-    
-    params = {
-        "base": {
-            "dimension": 2,
-            "output_dir": "output",
-        },
-        "solver": {
-            "config": {
-                "path_to_solver": "./leedsatl/satl2.exe",
-            },
-            "reference": {
-                "path_to_base_dir": "./base",
-            },
-        },
-        "algorithm": {
-            "label_list": ["z1", "z2"],
-            "param": {
-                "min_list": [-0.5, -0.5],
-                "max_list": [0.5,  0.5],
-                "initial_list": [-0.1, 0.1],
-            },
-             
-        },
-    }
-    
-    info = odatse.Info(params)
-    
-    solver = Solver(info)
-    runner = odatse.Runner(solver, info)
-    alg = odatse.algorithm.min_search.Algorithm(info, runner)
-    alg.main()
-
-dict 形式のパラメータを渡して Info クラスのインスタンスを作成します。
-同様に、パラメータをプログラム内で生成して渡すこともできます。
 
 入力ファイルの説明
 ~~~~~~~~~~~~~~~~~~~
 メインプログラム用の入力ファイル ``input.toml`` に、順問題ソルバーおよび逆問題解析アルゴリズムのパラメータを指定します。 ``base`` および ``solver`` セクションの内容は前述のグリッド型探索の場合と同じです。
-逆問題解析アルゴリズムについては、Nelder-Mead法のパラメータを algorithm.param の項目に指定します。なお、アルゴリズムの種類を指定する ``algorithm.name`` パラメータの値は無視されます。
 
+逆問題解析アルゴリズムについては、Nelder-Mead法のパラメータを ``algorithm.param`` の項目に指定します。なお、アルゴリズムの種類を指定する ``algorithm.name`` パラメータの値は無視されます。
 
 - ``min_list``, ``max_list`` は探索領域の指定で、領域の下端と上端を変数についてのリストの形式で与えます。
 
-- ``initial_list`` には初期値を指定します。
+- ``initial_list`` と ``initial_scale_list`` は初期シンプレックスを指定するパラメータです。2変数の例では、 ``initial_list = [z1, z2]``, ``initial_scale_list = [dz1, dz2]`` を指定した場合、 ``[z1, z2]``, ``[z1+dz1, z2]``, ``[z1, z2+dz2]`` を頂点とする三角形を初期シンプレックスにとります。
 
 
 計算実行
 ~~~~~~~~~~~~
 
-最初にサンプルファイルが置いてあるフォルダへ移動します(以下、本ソフトウェアをダウンロードしたデ
-ィレクトリ直下にいることを仮定します).
+あらかじめ ``sample/satleed`` ディレクトリ内で ``setup.sh`` を実行して SATLEED をコンパイルし、 ``satl1.exe`` と ``satl2.exe`` を作成しておきます。
+
+サンプルファイルが置いてあるフォルダへ移動します。
 
 .. code-block::
 
     $ cd sample/user_program
 
-グリッド探索の例でコンパイルした SATLEED プログラムをコピーします。作成していない場合は、
-``sample/mapper`` ディレクトリの中で ``sh setup.sh`` を実行し、 ``leedsatl/satl1.exe`` と ``leedsatl/satl2.exe`` を作ります。
-
-.. code-block::
-
-    $ mkdir leedsatl
-    $ cp ../mapper/leedsatl/satl2.exe ./leedsatl
-
-メインプログラムを実行します。(計算時間は通常のPCで数秒程度で終わります。)
+メインプログラムを実行します。計算時間は通常のPCで数分程度で終わります。
     
 .. code-block::
 
@@ -164,39 +113,30 @@ dict 形式のパラメータを渡して Info クラスのインスタンスを
 
 .. code-block::
 
-    Optimization terminated successfully.
-             Current function value: 0.157500
-             Iterations: 29
-             Function evaluations: 63
-    iteration: 29
-    len(allvecs): 30
-    step: 0
-    allvecs[step]: [-0.1  0.1]
-    step: 1
-    allvecs[step]: [-0.1  0.1]
-    step: 2
-    allvecs[step]: [-0.1  0.1]
-    step: 3
-    allvecs[step]: [-0.1  0.1]
-    step: 4
-    allvecs[step]: [-0.1  0.1]
-    step: 5
-    allvecs[step]: [-0.0375  -0.05625]
-    step: 6
-    allvecs[step]: [-0.0375  -0.05625]
-    step: 7
-    allvecs[step]: [-0.0375  -0.05625]
+    label_list      : ['z1', 'z2']
+    param.min_list  : [-0.5, 0.75]
+    param.max_list  : [0.5, 2.75]
+    param.initial_list: [-0.2, 1.75]
+    minimize.initial_scale_list: [0.02, 0.02]
+    eval: x=[-0.18  1.75], fun=0.9422
+    eval: x=[-0.14  1.72], fun=0.8607
+    eval: x=[-0.12  1.745], fun=0.7262
+    eval: x=[-0.03  1.6975], fun=0.4055
+    eval: x=[-0.01  1.7225], fun=0.3186
+    eval: x=[-0.01  1.7225], fun=0.3186
+    eval: x=[-0.045 1.71875], fun=0.2953
+    eval: x=[-0.025 1.74375], fun=0.2157
     ...
 
-``z1``, ``z2`` に各ステップでの候補パラメータと、その時の ``R-factor`` が出力されます。
+``x=[z1, z2]`` に各ステップでの候補パラメータと、その時の ``fun=R-factor`` が出力されます。
 最終的に推定されたパラメータは、 ``output/res.dat`` に出力されます。今の場合、
 
 .. code-block::
 
-    fx = 0.1575
-    z1 = -0.01910402104258537
-    z2 = 0.10217590294778345
-
-となります。リファレンス ref.txt が再現されていることが分かります。
+    fx = 0.2101
+    z1 = -0.01991012930870084
+    z2 = 1.7509844067692764
+        
+となります。リファレンス ref.txt が再現されているか確かめてください。
 
 なお、一連の計算を行う ``do.sh`` スクリプトが用意されています。

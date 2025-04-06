@@ -21,15 +21,11 @@ The following files are stored in the folder.
 - ``base``
 
   Directory that contains reference files to proceed with calculations in the main program.
-  The reference files include: ``exp.d``, ``rfac.d``, ``short.t``, ``tleed.o``, ``tleed4.i``, and ``tleed5.i``.
+  The reference files include: ``exp.d``, ``rfac.d``, ``tleed4.i``, and ``tleed5.i``.
 
 - ``ref.txt``
 
-  A file containing the answers you want to seek in this tutorial.
-
-- ``simple2.py``
-
-  Another version of source file of the main program. The parameters are embedded in the program as a dict.
+  A reference file for the result of the calculation.
 
 - ``prepare.sh`` , ``do.sh``
 
@@ -87,79 +83,32 @@ Next, the instances of the classes are created.
 After creating the instances of Solver, Runner, and Algorithm in this order, we invoke ``main()`` method of the Algorithm class to start analyses.
 
 In the above program, the input parameters are read from a file in TOML format. It is also possible to take the parameters in the form of dictionary.
-``simple2.py`` is anther version of the main program in which the parameters are embedded in the program. The entire source file is shown below:
-
-.. code-block:: python
-
-    import odatse
-    import odatse.algorithm.min_search
-    from odatse.extra.LEED import Solver
-    
-    params = {
-        "base": {
-            "dimension": 2,
-            "output_dir": "output",
-        },
-        "solver": {
-            "config": {
-                "path_to_solver": "./leedsatl/satl2.exe",
-            },
-            "reference": {
-                "path_to_base_dir": "./base",
-            },
-        },
-        "algorithm": {
-            "label_list": ["z1", "z2"],
-            "param": {
-                "min_list": [-0.5, -0.5],
-                "max_list": [0.5,  0.5],
-                "initial_list": [-0.1, 0.1],
-            },
-             
-        },
-    }
-    
-    info = odatse.Info(params)
-    
-    solver = Solver(info)
-    runner = odatse.Runner(solver, info)
-    alg = odatse.algorithm.min_search.Algorithm(info, runner)
-    alg.main()
-
-
-An instance of Info class is created by passing a set of parameters in a dict form.
-It is also possible to generate the parameters within the program before passing to the class.
 
 
 Input files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The input file for the main program, ``input.toml``, contains parameters for the direct problem solver and the inverse problem algorithm. The contents of the ``base`` and ``solver`` sections are the same as those in the previous example.
+
 The parameters for the Nelder-Mead method should be specified in the ``algorithm.param`` section, while ``algorithm.name`` for the type of algorithm is ignored.
 
 - ``min_list`` and ``max_list`` specifies the search region in the form of the lower and upper bounds of the parameters as lists.
 
-- ``initial_list`` specifies the initial values.
+- ``initial_list`` and ``initial_scale_list`` specify the initial simplex. For the two-parameter case, when ``initial_list = [z1, z2]`` and ``initial_scale_list = [dz1, dz2]`` are specified, a triangle is taken as an initial simplex that has the vertices at ``[z1, z2]``, ``[z1+dz1, z2]``, and ``[z1, z2+dz2]``.
 
 
 Calculation execution
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, move to the folder where the sample files are located. (We assume that you are directly under the directory where you downloaded this software.)
+Before running the sample program, you need to run ``setup.sh`` in the ``sample/satleed`` directory to compile SATLEED and generate ``satl1.exe`` and ``satl2.exe``.
+
+Move to the directory in which sample files are located:
 
 .. code-block::
 
    $ cd sample/user_program
 
-Copy the SATLEED programs that have been compiled in the grid search tutorial.
-Otherwise, run ``sh setup.sh`` in the ``sample/mapper`` directory to generate ``leedsatl/satl1.exe`` and ``leedsatl/satl2.exe``.
-
-.. code-block::
-
-   $ mkdir leedsatl
-   $ cp ../mapper/leedsatl/satl2.exe leedsatl/
-
-Then, run the main program. The computation time will take only a few seconds on a normal PC.
+Then, run the main program. The computation time will take only a few minutes on a normal PC.
 
 .. code-block::
 
@@ -169,28 +118,19 @@ The standard output will be shown like as follows.
 
 .. code-block::
 
-    Optimization terminated successfully.
-             Current function value: 0.157500
-             Iterations: 29
-             Function evaluations: 63
-    iteration: 29
-    len(allvecs): 30
-    step: 0
-    allvecs[step]: [-0.1  0.1]
-    step: 1
-    allvecs[step]: [-0.1  0.1]
-    step: 2
-    allvecs[step]: [-0.1  0.1]
-    step: 3
-    allvecs[step]: [-0.1  0.1]
-    step: 4
-    allvecs[step]: [-0.1  0.1]
-    step: 5
-    allvecs[step]: [-0.0375  -0.05625]
-    step: 6
-    allvecs[step]: [-0.0375  -0.05625]
-    step: 7
-    allvecs[step]: [-0.0375  -0.05625]
+    label_list      : ['z1', 'z2']
+    param.min_list  : [-0.5, 0.75]
+    param.max_list  : [0.5, 2.75]
+    param.initial_list: [-0.2, 1.75]
+    minimize.initial_scale_list: [0.02, 0.02]
+    eval: x=[-0.18  1.75], fun=0.9422
+    eval: x=[-0.14  1.72], fun=0.8607
+    eval: x=[-0.12  1.745], fun=0.7262
+    eval: x=[-0.03  1.6975], fun=0.4055
+    eval: x=[-0.01  1.7225], fun=0.3186
+    eval: x=[-0.01  1.7225], fun=0.3186
+    eval: x=[-0.045 1.71875], fun=0.2953
+    eval: x=[-0.025 1.74375], fun=0.2157
     ...
 
 
@@ -200,10 +140,10 @@ In the current case, the following result will be obtained:
 
 .. code-block::
 
-    fx = 0.1575
-    z1 = -0.01910402104258537
-    z2 = 0.10217590294778345
-
+    fx = 0.2101
+    z1 = -0.01991012930870084
+    z2 = 1.7509844067692764
+        
 You can see that we will get the same values as the correct answer data in ``ref.txt``.
 
 Note that ``do.sh`` is available as a script for batch calculation.
