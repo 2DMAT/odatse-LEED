@@ -16,6 +16,7 @@ packages = [
 python = ">=3.9"
 numpy = "^1.14"
 pydantic = "^2"
+fortranformat = "^2"
 ODAT-SE = "^3"
 
 [tool.poetry.scripts]
