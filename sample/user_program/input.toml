@@ -5,14 +5,20 @@ output_dir = "output"
 [solver]
 name = "leed"
 [solver.config]
-path_to_solver = "./leedsatl/satl2.exe"
+path_to_first_solver = "../satleed/satl1.exe"
+path_to_second_solver = "../satleed/satl2.exe"
+[solver.param]
+string_list = ["opt000", "opt001"]
 [solver.reference]
 path_to_base_dir = "./base"
+rfactor = "satleed"
 
 [algorithm]
 name = "minsearch"
 label_list = ["z1", "z2"]
 [algorithm.param]
-min_list = [-0.5, -0.5]
-max_list = [0.5, 0.5]
-initial_list = [-0.1, 0.1]
+min_list = [-0.5, 0.75]
+max_list = [0.5, 2.75]
+initial_list = [-0.2, 1.75]
+[algorithm.minimize]
+initial_scale_list = [0.02, 0.02]

@@ -25,11 +25,34 @@ class SolverConfig(BaseModel):
 
     Attributes
     ----------
-    path_to_solver : str
-        Path to the satl2 solver executable.
+    path_to_first_solver : str
+        Path to the first solver executable (phase shift calculation)
+    path_to_second_solver : str
+        Path to the second solver executable (LEED intensity calculation)  
+    sigma_file_path : str
+        Path to the experimental data file containing error bars
+    remove_work_dir : bool
+        Whether to remove working directories after calculation
+    use_tmpdir : bool
+        Whether to use system temp directory for calculations
     """
-    path_to_solver: str = "satl2.exe"
-    
+    path_to_first_solver: str = "satl1.exe"  # Default path to first solver
+    path_to_second_solver: str = "satl2.exe"  # Default path to second solver
+    sigma_file_path: str = "exp.d"  # Default path to experimental data
+    remove_work_dir: Optional[bool] = False  # Keep work directories by default
+    use_tmpdir: Optional[bool] = False  # Use local directory by default
+
+class SolverParam(BaseModel):
+    """
+    Configuration for the solver
+
+    Attributes
+    ----------
+    string_list : List[str]
+        List of strings to be replaced in the input template files
+    """
+    string_list: List[str]  # List of parameter strings for template substitution
+
 class SolverReference(BaseModel):
     """
     Reference data for the solver
@@ -37,9 +60,21 @@ class SolverReference(BaseModel):
     Attributes
     ----------
     path_to_base_dir : str
-        Path to the directory containing basic data.
+        Path to the directory containing reference data and input templates
+    rfactor : Union[str,Dict], optional
+        R-factor type specification ("rpe", "rsq", etc.) or dictionary of settings
+    rescale : bool, optional
+        Whether to rescale intensities during R-factor calculation
+    smoothing_factor : float, optional
+        Factor for smoothing I-V curves (0.0 means no smoothing)
+    vi_value : float, optional
+        Imaginary potential parameter for Pendry R-factor calculation
     """
-    path_to_base_dir: str = "base"
+    path_to_base_dir: str = "base"  # Default reference data directory
+    rfactor: Optional[Union[str,Dict]] = "rpe"  # Default to Pendry R-factor
+    rescale: Optional[bool] = False  # Default to no intensity rescaling
+    smoothing_factor: Optional[float] = 0.0  # Default to no smoothing
+    vi_value: Optional[float] = None  # Imaginary potential parameter
 
 class SolverInfo(BaseModel):
     """
@@ -48,19 +83,37 @@ class SolverInfo(BaseModel):
     Attributes
     ----------
     name : str
-        Name of the solver.
+        Name of the solver (default: "leed")
+    dimension : int
+        Number of optimization parameters
     config : SolverConfig
-        Configuration for the solver.
+        Configuration settings for solver executables
+    param : SolverParam
+        Parameters for input file generation
     reference : SolverReference
-        Reference data for the solver
+        Reference data and R-factor settings
     """
-    name: Optional[str] = "leed"
-    config: SolverConfig
-    reference: SolverReference
+    name: Optional[str] = "leed"  # Default solver name
+    dimension: Optional[int] = None  # Number of parameters to optimize
+    config: SolverConfig  # Solver executable configuration
+    param: SolverParam  # Input parameter configuration  
+    reference: SolverReference  # Reference data configuration
+
+def parse_solver_info(**kwargs):
+    try:
+        info = SolverInfo(**kwargs)
+    except ValidationError as e:
+        print("----------------")
+        print(str(e))
+        print("----------------")
+        raise ValueError("failed in parsing solver parameters") from e
+    return info
+
 
 if __name__ == "__main__":
     import tomli
 
+    # Example configuration in TOML format
     input_data = """
     [solver]
     [solver.config]
@@ -69,6 +122,7 @@ if __name__ == "__main__":
     path_to_base_dir = "base"
     """
 
+    # Parse TOML and create SolverInfo instance
     params = tomli.loads(input_data)
     si = SolverInfo(**params["solver"])
 

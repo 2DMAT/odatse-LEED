@@ -14,165 +14,162 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 
-from typing import Dict, List, Tuple
-import itertools
-import os
-import os.path
-import shutil
-from distutils.dir_util import copy_tree
+from typing import List
 from pathlib import Path
+import os
+from distutils.dir_util import copy_tree
 import subprocess
-
 import numpy as np
 
 import odatse
-from odatse import exception
+from .parameter import parse_solver_info
 from .input import Input
-from .parameter import SolverInfo
+from .output import Output
+#from odatse.solver.util import run_by_subprocess, Workdir
+from .util import run_by_subprocess, Workdir
 
 class Solver(odatse.solver.SolverBase):
+    """LEED (Low Energy Electron Diffraction) solver implementation.
+    
+    This class implements the solver for LEED calculations, which requires two external
+    executables to be run in sequence.
     """
-    Solver class for LEED (Low-Energy Electron Diffraction) analysis.
-    Inherits from odatse.solver.SolverBase.
-    """
-    path_to_solver: Path
-    dimension: int
+    _name = "leed"
 
     def __init__(self, info: odatse.Info):
-        """
-        Initializes the Solver instance.
-
+        """Initialize the LEED solver.
+        
         Parameters
         ----------
         info : odatse.Info
-            Information object containing solver configuration.
+            Configuration information for the solver
         """
         super().__init__(info)
 
-        self._name = "leed"
-        self.param = SolverInfo(**info.solver)
+        # Convert solver-specific configuration
+        self.info = parse_solver_info(**info.solver)
 
-        # Set environment
-        p2solver = self.param.config.path_to_solver
-        if os.path.dirname(p2solver) != "":
-            # ignore ENV[PATH]
-            self.path_to_solver = self.root_dir / Path(p2solver).expanduser()
-        else:
-            for P in itertools.chain([self.root_dir], os.environ["PATH"].split(":")):
-                self.path_to_solver = Path(P) / p2solver
-                if os.access(self.path_to_solver, mode=os.X_OK):
-                    break
-        if not os.access(self.path_to_solver, mode=os.X_OK):
-            raise exception.InputError(f"ERROR: solver ({p2solver}) is not found")
+        # Locate and validate the external solver executables
+        self.path_to_first_solver = self.set_solver_path(self.info.config.path_to_first_solver)
+        self.path_to_second_solver = self.set_solver_path(self.info.config.path_to_second_solver)
 
-        self.path_to_base_dir = self.param.reference.path_to_base_dir
-        # check files
-        files = ["exp.d", "rfac.d", "tleed4.i", "tleed5.i", "tleed.o", "short.t"]
-        for file in files:
-            if not os.path.exists(os.path.join(self.path_to_base_dir, file)):
-                raise exception.InputError(
-                    f"ERROR: input file ({file}) is not found in ({self.path_to_base_dir})"
-                )
-        self.input = Input(info)
+        # Directory containing reference data and input templates
+        self.path_to_base_dir = self.info.reference.path_to_base_dir
+
+        # Ensure all required input files are present
+        self.check_files(["exp.d", "rfac.d", "tleed4.i", "tleed5.i"], self.path_to_base_dir)
+
+        # Initialize input generator and output parser
+        self.input = Input(self.info)
+        self.output = Output(self.info)
 
     def evaluate(self, x: np.ndarray, args = (), nprocs: int = 1, nthreads: int = 1) -> float:
-        """
-        Evaluates the solver with the given parameters.
-
+        """Evaluate the LEED calculation for given parameters.
+        
         Parameters
         ----------
         x : np.ndarray
-            Input array.
-        args : tuple, optional
-            Additional arguments.
-        nprocs : int, optional
-            Number of processes. Defaults to 1.
-        nthreads : int, optional
-            Number of threads. Defaults to 1.
-
+            Input parameters for the calculation
+        args : tuple
+            Additional arguments (used for work directory naming)
+        nprocs : int
+            Number of MPI processes (not used in current implementation)
+        nthreads : int
+            Number of OpenMP threads (not used in current implementation)
+            
         Returns
         -------
         float
-            The result of the evaluation.
+            Calculation result (typically R-factor)
         """
-        self.prepare(x, args)
-        cwd = os.getcwd()
-        os.chdir(self.work_dir)
-        self.run(nprocs, nthreads)
-        os.chdir(cwd)
-        result = self.get_results()
+        # Create unique working directory for this evaluation
+        work_dir = "Log{:08d}_{:08d}".format(*args)
+
+        with Workdir(work_dir, remove=self.info.config.remove_work_dir, use_tmpdir=self.info.config.use_tmpdir):
+            # Copy reference data and templates to working directory
+            for dir in [self.path_to_base_dir]:
+                copy_tree(os.path.join(self.root_dir, dir), ".")
+
+            # Generate input files for current parameters
+            self.input.generate(x)
+
+            # Run the calculation
+            self.run(nprocs, nthreads)
+
+            # Parse and return results
+            result = self.output.get_results()
+
         return result
 
-    def prepare(self, x: np.ndarray, args) -> None:
-        """
-        Prepares the solver for evaluation.
-
-        Parameters
-        ----------
-        x : np.ndarray
-            Input array.
-        args : tuple
-            Additional arguments.
-        """
-        self.work_dir = self.proc_dir
-        for dir in [self.path_to_base_dir]:
-            copy_tree(os.path.join(self.root_dir, dir), os.path.join(self.work_dir))
-        self.input.prepare(x, args)
-
     def run(self, nprocs: int = 1, nthreads: int = 1) -> None:
-        """
-        Runs the solver.
+        """Execute the LEED calculation sequence.
+        
+        Runs two solvers in sequence. Catches and reports any execution errors.
 
         Parameters
         ----------
-        nprocs : int, optional
-            Number of processes. Defaults to 1.
-        nthreads : int, optional
-            Number of threads. Defaults to 1.
-        """
-        self._run_by_subprocess([str(self.path_to_solver)])
+        nprocs : int
+            Number of MPI processes (not used in current implementation)
+        nthreads : int
+            Number of OpenMP threads (not used in current implementation)
 
-    def _run_by_subprocess(self, command: List[str]) -> None:
+        Note
+        ----
+        raises RuntimeError when error occurs in either execution of solvers
         """
-        Runs a command using subprocess.
+        # Run first solver (typically phase shift calculation)
+        run_by_subprocess([self.path_to_first_solver])
+        # Run second solver (typically LEED intensity calculation)
+        run_by_subprocess([self.path_to_second_solver])
 
+    def check_files(self, files, base_dir):
+        """Check if all required files exist in the base directory.
+        
         Parameters
         ----------
-        command : List[str]
-            Command to run.
-        """
-        with open("stdout", "w") as fi:
-            subprocess.run(
-                command,
-                stdout=fi,
-                stderr=subprocess.STDOUT,
-                check=True,
-            )
-
-    def get_results(self) -> float:
-        """
-        Retrieves the results from the solver.
-
-        Returns
-        -------
-        float
-            The R-factor result.
-
+        files : list of str
+            List of required file names
+        base_dir : str
+            Directory to check for files
+            
         Raises
         ------
         RuntimeError
-            If the R-factor cannot be found.
+            If any required file is missing
         """
-        rfactor = -1.0
-        filename = os.path.join(self.work_dir, "search.s")
-        with open(filename, "r") as fr:
-            lines = fr.readlines()
-            for line in lines:
-                if "R-FACTOR" in line:
-                    rfactor = float(line.split("=")[1])
+        for f in files:
+            if not os.path.exists(os.path.join(base_dir, f)):
+                raise RuntimeError(f"ERROR: input file \"{f}\" not found in \"{base_dir}\"")
+
+    def set_solver_path(self, solver_name: str) -> Path:
+        """Locate and validate the solver executable.
+        
+        Parameters
+        ----------
+        solver_name : str
+            Name or path of the solver executable
+            
+        Returns
+        -------
+        Path
+            Resolved path to the executable
+            
+        Raises
+        ------
+        RuntimeError
+            If solver is not found or not executable
+        """
+        if os.path.dirname(solver_name) != "":
+            # If path is provided, resolve relative to root directory
+            solver_path = self.root_dir / Path(solver_name).expanduser()
+        else:
+            # If only name is provided, search in PATH and root directory
+            for p in [self.root_dir] + os.environ["PATH"].split(":"):
+                solver_path = os.path.join(p, solver_name)
+                if os.access(solver_path, mode=os.X_OK):
                     break
-        if rfactor == -1.0:
-            msg = f"R-FACTOR cannot be found in {filename}"
-            raise RuntimeError(msg)
-        return rfactor
+        # Final check for executable permission
+        if not os.access(solver_path, mode=os.X_OK):
+            raise RuntimeError(f"ERROR: solver ({solver_name}) is not found")
+        return solver_path
 

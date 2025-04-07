@@ -6,8 +6,8 @@ export OMPI_MCA_rmaps_base_oversubscribe=true
 #CMD=odatse-SXRD
 CMD="python3 ../../src/main.py"
 
-#MPIEXEC=""
-MPIEXEC="mpiexec -np 4"
+MPIEXEC=""
+#MPIEXEC="mpiexec -np 4"
 
 
 sh ./prepare.sh

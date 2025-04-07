@@ -5,13 +5,13 @@ odatse-LEED のインストール
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - python 3.9 以上
 
-    - 必要なpythonパッケージ
+- pythonパッケージ
 
-        - numpy (>= 1.14)
-        - pydantic (>= 2.0)
-
-- ODAT-SE version 3.0 以降
-
+  - numpy (>= 1.14)
+  - pydantic (>= 2.0)
+  - fortranformat
+  - ODAT-SE (>=3.0)
+   
 - SATLEED
 
   - コンパイルには Fortranコンパイラが必要
@@ -38,33 +38,22 @@ odatse-LEED のインストール
 
      ``--user`` オプションを付けるとローカル (``$HOME/.local``) にインストールできます。
 
+     .. note::
+        Python 3.7未満の環境では以下のようなエラーが発生します。本パッケージではPython 3.9以上を利用するようにしてください。
+
+        .. code-block:: bash
+
+           Directory '.' is not installable. File 'setup.py' not found.
+
      ``python3 -m pip install .[all]`` を実行するとオプションのパッケージも同時にインストールします。
-   
-2. SATLEED をインストールする
 
-   - ``SATLEED`` のソースコードは以下の URL から取得できます。
-
-     .. code-block:: bash
-
-	$ wget http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip
-
-   - ファイルを展開し、所定の手続きに従ってコンパイルします。
-
-     ``SATLEED`` は計算したい系の詳細によってソースコードのパラメータを適宜書き換える必要があります。 ``sample/leed`` にあるサンプルを実行する場合の書き換えとコンパイルを自動で行うスクリプト ``setup.sh`` が用意されています。
-
-     .. code-block:: bash
-
-	$ cd sample/mapper
-	$ sh ./setup.sh
-
-     ``setup.sh`` を実行すると、 ``leedsatl`` ディレクトリに ``satl1.exe`` と ``satl2.exe`` が作成されます。
-   
-3. odatse-LEED をインストールする
+2. odatse-LEED をインストールする
 
    odatse-LEED のソースファイルは GitHub リポジトリから取得できます。以下の手順でリポジトリをクローンした後、pip コマンドを実行してインストールします。
 
      .. code-block:: bash
-
+      
+        $ cd ../
         $ git clone https://github.com/2DMAT/odatse-LEED.git
         $ cd odatse-LEED
         $ python3 -m pip install .
@@ -72,6 +61,29 @@ odatse-LEED のインストール
      ``--user`` オプションを付けるとローカル (``$HOME/.local``) にインストールできます。
 
      odatse-LEED のライブラリと、実行コマンド ``odatse-LEED`` がインストールされます。
+
+3. SATLEED をインストールする
+
+   - ``SATLEED`` のソースコードは以下の URL から取得できます。
+
+     .. code-block::
+
+	http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip
+
+     ファイルを展開し、所定の手続きに従ってコンパイルします。
+
+   - ``SATLEED`` は計算したい系の詳細によってソースコードのパラメータを適宜書き換える必要があります。 
+     ステップ2 で取得した odatse-LEED のソースファイルの ``sample/satleed`` ディレクトリに、サンプルを実行する場合の書き換え ``leedsatl.patch`` とコンパイルを自動で行うスクリプト ``setup.sh`` が用意されているので、それを利用しインストールすることもできます。
+
+     .. code-block:: bash
+
+         $ cd odatse-LEED/sample/satleed
+         $ sh ./setup.sh
+
+     ``setup.sh`` を実行すると、現在のディレクトリに ``satl1.exe`` と ``satl2.exe`` が作成されます。
+
+     コンパイラやコンパイルオプションを変更する場合は ``setup.sh`` を編集してください。
+   
 
 実行方法
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
