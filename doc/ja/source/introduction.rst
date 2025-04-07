@@ -14,7 +14,7 @@ ODAT-SEは、順問題ソルバーに対して探索アルゴリズムを適用�
 odatse-LEEDとは
 --------------------------------
 
-``SATLEED`` は M.A. Van Hove氏により作成された LEED の解析を行うプログラムで、原子位置などから Rocking curve を計算し、実験で得られた Rocking curve からの誤差を求めます。odatse-LEED は、この SATLEED を ODAT-SE の順問題ソルバーとして利用するためのアダプタライブラリです。2DMAT v2.x の順問題ソルバーの一つとして開発されたコンポーネントを、独立なモジュールとして再構成したものです。ODAT-SE および SATLEED と組み合わせて使用します。
+``SATLEED`` は M.A. Van Hove氏により作成された LEED の解析を行うプログラムで、原子位置などから I-V curve を計算し、実験で得られた I-V curve からの誤差を求めます。odatse-LEED は、この SATLEED を ODAT-SE の順問題ソルバーとして利用するためのアダプタライブラリです。2DMAT v2.x の順問題ソルバーの一つとして開発されたコンポーネントを、独立なモジュールとして再構成したものです。ODAT-SE および SATLEED と組み合わせて使用します。
 ``SATLEED`` に関する詳細については [SATLEED]_ をご覧ください。
 
 .. [SATLEED] M.A. Van Hove, W. Moritz, H. Over, P.J. Rous, A. Wander, A. Barbieri, N. Materer, U. Starke, G.A. Somorjai, Automated determination of complex surface structures by LEED, Surface Science Reports, Volume 19, 191-229 (1993). https://doi.org/10.1016/0167-5729(93)90011-D
@@ -54,7 +54,7 @@ Bibtex::
 
 odatse-LEED
 
-- v1.0.0 : 2025-XX-XX
+- v1.0.0 : 2025-04-07
 - v1.0-alpha : 2024-11-25
 
 ODAT-SE

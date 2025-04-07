@@ -15,7 +15,7 @@ As algorithms, it offers the Nelder-Mead method, the grid search method, the Bay
 What is odatse-LEED ?
 --------------------------------
 
-``SATLEED`` is a software package developed by M.A. Van Hove for the analyses of LEED, which calculates the Rocking curve from the atomic positions and other parameters, and evaluate the deviations from the Rocking curve obtained from the experiments.
+``SATLEED`` is a software package developed by M.A. Van Hove for the analyses of LEED, which calculates the I-V curve from the atomic positions and other parameters, and evaluate the deviations from the I-V curve obtained from the experiments.
 odatse-LEED is an adaptor library to use SATLEED as a direct problem solver of ODAT-SE.
 It was originally developed as a component of 2DMAT v2.x, and has been restructured as a separate module to be used with ODAT-SE and SATLEED.
 For more information on ``SATLEED``, see [SATLEED]_.
@@ -54,7 +54,7 @@ Version Information
 
 odatse-LEED
 
-- v1.0.0: 2025-XX-XX
+- v1.0.0: 2025-04-07
 - v1.0-alpha: 2024-11-25
 
 ODAT-SE

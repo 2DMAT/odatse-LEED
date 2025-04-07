@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "odatse-LEED"
-version = "1.0-alpha"
+version = "1.0.0"
 description = "LEED solver module for ODAT-SE: data-analysis software of quantum beam diffraction experiments for 2D material structure"
 authors = ["2DMAT developers <2dmat-dev@issp.u-tokyo.ac.jp>"]
 license = "GPL-3.0-or-later"
