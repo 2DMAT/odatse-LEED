@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Input and output &#8212; ODAT-SE solver module: odatse-LEED 1.0-alpha documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
     <script src="_static/documentation_options.js?v=1e4f7814"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -48,13 +48,48 @@ The output data consist of files containing the result of optimization.
 Their contents will be shown in this section.</p>
 <section id="input-parameters">
 <h2>Input parameters<a class="headerlink" href="#input-parameters" title="Link to this heading">¶</a></h2>
-<p>Input parameters are specified in subsections in the <code class="docutils literal notranslate"><span class="pre">solver</span></code> section (<code class="docutils literal notranslate"><span class="pre">config</span></code> and <code class="docutils literal notranslate"><span class="pre">reference</span></code>).</p>
+<p>Input parameters are specified in the <code class="docutils literal notranslate"><span class="pre">solver</span></code> section and the subsections (<code class="docutils literal notranslate"><span class="pre">config</span></code>, <code class="docutils literal notranslate"><span class="pre">param</span></code>, and <code class="docutils literal notranslate"><span class="pre">reference</span></code>).</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p>
+<p>Format: string</p>
+<p>Description: The name of the direct problem solver. Optional.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dimension</span></code></p>
+<p>Format: integer</p>
+<p>Description: The number of parameters. If it is not specified, the dimension is taken from the [base] section.</p>
+</li>
+</ul>
 <section id="config-section">
 <h3>[<code class="docutils literal notranslate"><span class="pre">config</span></code>] section<a class="headerlink" href="#config-section" title="Link to this heading">¶</a></h3>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">path_to_solver</span></code></p>
+<li><p><code class="docutils literal notranslate"><span class="pre">path_to_first_solver</span></code></p>
 <p>Format: string</p>
-<p>Description: Path to the solver <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> .</p>
+<p>Description: Path to the solver <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code>. The default value is <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path_to_second_solver</span></code></p>
+<p>Format: string</p>
+<p>Description: Path to the solver <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code>. The default value is <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigma_file_path</span></code></p>
+<p>Format: string</p>
+<p>Description: Path to the experimental data file. The default value is <code class="docutils literal notranslate"><span class="pre">exp.d</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">remove_work_dir</span></code></p>
+<p>Format: boolean</p>
+<p>Description: The output files of the solver program are stored in a directory <code class="docutils literal notranslate"><span class="pre">LogXXXX_YYYY</span></code> for each search point, in which <code class="docutils literal notranslate"><span class="pre">XXXX</span></code> denotes the step count and <code class="docutils literal notranslate"><span class="pre">YYYY</span></code> denotes the identifier such as replica number. When <code class="docutils literal notranslate"><span class="pre">remove_work_dir</span></code> is set to true, the directory is removed after the evaluation at the search point. The default value is false.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_tmpdir</span></code></p>
+<p>Format: boolean</p>
+<p>Description: If it is true, the intermediate files are stored in a directory within /tmp or within the directory specified by the environment variable TMPDIR. The default value is false.</p>
+</li>
+</ul>
+</section>
+<section id="param-section">
+<h3>[<code class="docutils literal notranslate"><span class="pre">param</span></code>] section<a class="headerlink" href="#param-section" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">string_list</span></code></p>
+<p>Format: list of strings</p>
+<p>Description: List of keywords embedded in the input template files.</p>
 </li>
 </ul>
 </section>
@@ -63,44 +98,131 @@ Their contents will be shown in this section.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">path_to_base_dir</span></code></p>
 <p>Format: string</p>
-<p>Description: Path to the directory which stores <code class="docutils literal notranslate"><span class="pre">exp.d</span></code>, <code class="docutils literal notranslate"><span class="pre">rfac.d</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed.o</span></code>, <code class="docutils literal notranslate"><span class="pre">short.t</span></code>.</p>
+<p>Description: Path to the directory which stores <code class="docutils literal notranslate"><span class="pre">exp.d</span></code>, <code class="docutils literal notranslate"><span class="pre">rfac.d</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rfactor</span></code></p>
+<p>Format: string or dictionary</p>
+<p>Description: Types of R-factor. The weighted average of multiple types of R-factors can be specified by a dictionary that relates the R-factor types and the relative weights.
+(For the latter, only the R-factor types r1 .. rpe are available.)</p>
+<p>The available types are described in the following section.
+The default value is <code class="docutils literal notranslate"><span class="pre">rpe</span></code> (Pendry R-factor).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rescale</span></code></p>
+<p>Format: boolean</p>
+<p>Description: If it is set to true, <span class="math notranslate nohighlight">\(I_t\)</span> is rescaled in the R-factor calculation. The default value is false.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">smoothing</span> <span class="pre">factor</span></code></p>
+<p>Format: float</p>
+<p>Description: The smoothing parameter for I-V curve data. If it is set to 0.0, the smoothing is not applied. The default value is 0.0.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vi_value</span></code></p>
+<p>Format: float</p>
+<p>Description: The imaginary part of the inner potential needed to calculate the Pendry R-factor. The parameter value can be explicitly specified by <code class="docutils literal notranslate"><span class="pre">vi_value</span></code>, or it is obtained from the input file <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code> for SATLEED.</p>
 </li>
 </ul>
 </section>
+</section>
+<section id="types-of-r-factor">
+<h2>Types of R-factor<a class="headerlink" href="#types-of-r-factor" title="Link to this heading">¶</a></h2>
+<p>The types of R-factors available for the <code class="docutils literal notranslate"><span class="pre">rfactor</span></code> parameter are listed as follows.</p>
+<p>The notation is summarized:
+<span class="math notranslate nohighlight">\(\sum_b\)</span> denotes the sum over the beams.
+<span class="math notranslate nohighlight">\(\sideset{}{'}\sum_b = \sum_b w_b\)</span> denotes the sum over that beams that takes account of the relative weight of energy ranges <span class="math notranslate nohighlight">\(w_b = {\int dE}/{\sum_b \int dE}\)</span>.
+When <code class="docutils literal notranslate"><span class="pre">rescale</span></code> is set to true, <span class="math notranslate nohighlight">\(c = {\int I_e dE}/{\int I_t dE}\)</span>, otherwise <span class="math notranslate nohighlight">\(c=1\)</span>.</p>
+<ul>
+<li><p>rsq</p>
+<div class="math notranslate nohighlight">
+\[R = \sqrt{ \dfrac{\sum_b \int \left(I_e - I_t\right)^2 dE}{\sum_b \int I_e^{\,2} dE} }\]</div>
+</li>
+<li><p>rsq_modified</p>
+<div class="math notranslate nohighlight">
+\[R = \sqrt{ \sideset{}{'}\sum_b \dfrac{\int \left(I_e - I_t\right)^2 dE}{\int I_e^{\,2} dE} }\]</div>
+</li>
+<li><p>r1</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{\int \left| I_e - c I_t \right| dE}{\int I_e dE}\]</div>
+</li>
+<li><p>r2</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{\int \left( I_e - c I_t \right)^2 dE}{\int I_e^{\,2} dE}\]</div>
+</li>
+<li><p>rp1</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{\int \left| I_e^\prime - c I_t^\prime \right| dE}{\int \left|I_e^\prime\right| dE}\]</div>
+</li>
+<li><p>rp2</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{\int \left( I_e^\prime - c I_t^\prime \right)^2 dE}{\int (I_e^\prime)^{2} dE}\]</div>
+</li>
+<li><p>rpp1</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{\int \left| I_e^{\prime\prime} - c I_t^{\prime\prime} \right| dE}{\int \left|I_e^{\prime\prime}\right| dE}\]</div>
+</li>
+<li><p>rpp2</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{\int \left( I_e^{\prime\prime} - c I_t^{\prime\prime} \right)^2 dE}{\int (I_e^{\prime\prime})^{2} dE}\]</div>
+</li>
+<li><p>rrzj (reduced Zanazzi-Jona R-factor)</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{1}{0.027 \int I_e dE} \int \dfrac{\left| I_e^{\prime\prime} - c I_t^{\prime\prime} \right|\cdot\left| I_e^{\prime} - c I_t^{\prime} \right|}{\left|I_e^{\prime}\right| + {\rm max}\left|I_e^{\prime}\right|} dE\]</div>
+</li>
+<li><p>rmzj (modified Zanazzi-Jona R-factor)</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{1}{\int I_e^{\prime\prime} dE} \int \dfrac{\left| I_e^{\prime\prime} - c I_t^{\prime\prime} \right|\cdot\left| I_e^{\prime} - c I_t^{\prime} \right|}{\left|I_e^{\prime}\right| + c\cdot{\rm max}\left|I_t^{\prime}\right|} dE\]</div>
+</li>
+<li><p>rpe (Pendry R-factor)</p>
+<div class="math notranslate nohighlight">
+\[R = \sideset{}{'}\sum_b \dfrac{\int \left(Y_e - Y_t\right)^2 dE}{\int Y_e^{\,2} + Y_t^{\,2} dE}, \quad Y = \dfrac{L}{1 + V_{0i}^{\,2} L^2}, \quad L = {\tilde I}^\prime / {\tilde I}.\]</div>
+<p>In the Pendry R-factor, <span class="math notranslate nohighlight">\({\tilde I} = I_t + \kappa {\langle I \rangle}\)</span>, where <span class="math notranslate nohighlight">\(\kappa\)</span> is the parameter denoted by <code class="docutils literal notranslate"><span class="pre">PERSH</span></code>, and it is set to 0.05.
+<span class="math notranslate nohighlight">\({\langle I \rangle}\)</span> is the average over the peaks of <span class="math notranslate nohighlight">\(I\)</span>.
+<span class="math notranslate nohighlight">\(V_{0i}\)</span> denotes the imaginary part of the inner potential.</p>
+<p>N.B. when RPE (the Pendry R-factor) is chosen in rfac.d for the R-factor (i.e. WR(10) is set to 1), the output of I-V curves contains <span class="math notranslate nohighlight">\({\tilde I}\)</span> instead of <span class="math notranslate nohighlight">\(I\)</span>. Therefore, WR(10) must be set to 0 except when <code class="docutils literal notranslate"><span class="pre">satleed</span></code> is chosen for <code class="docutils literal notranslate"><span class="pre">rfactor</span></code> type.</p>
+</li>
+<li><p>satleed</p>
+<p>The value of R-factor is taken from the output (search.s) of satl2.exe.</p>
+</li>
+</ul>
 </section>
 <section id="reference-file-for-solver">
 <h2>Reference file for Solver<a class="headerlink" href="#reference-file-for-solver" title="Link to this heading">¶</a></h2>
 <section id="target-reference-file">
 <h3>Target reference file<a class="headerlink" href="#target-reference-file" title="Link to this heading">¶</a></h3>
-<p>The file containing the data to be targeted to fit. Edit <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code> in <code class="docutils literal notranslate"><span class="pre">path_to_base_dir</span></code> in the [<code class="docutils literal notranslate"><span class="pre">reference</span></code>] section.
-Add the number you want to optimize to <code class="docutils literal notranslate"><span class="pre">optxxx</span></code> (where xxx is a three-digit number in the format 000, 001, 002, …). (where xxx is a three-digit integer in the form 000, 001, 002, …).
-Note that the number of xxx must match the order and number of variables in the list of <code class="docutils literal notranslate"><span class="pre">odatse-LEED</span></code> variables to be optimized.
-Note that if IFLAG and LSFLAG are not set to 0, the satleed side is also optimized.</p>
+<p>The file containing the data to be targeted to fit. Edit <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code> and <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code> in <code class="docutils literal notranslate"><span class="pre">path_to_base_dir</span></code> in the [<code class="docutils literal notranslate"><span class="pre">reference</span></code>] section.</p>
+<p>The parameter values to be optimized are replaced by the keywords that depend on the types of parameters:
+The coordinates or the deviations of the coordinates are denoted by strings starting from <code class="docutils literal notranslate"><span class="pre">opt</span></code>.
+The inner potential is denoted by strings starting from <code class="docutils literal notranslate"><span class="pre">IP</span></code>.
+The Debye temperatures are denoted by strings starting from <code class="docutils literal notranslate"><span class="pre">debye</span></code>.
+The keywords are listed in the parameter <code class="docutils literal notranslate"><span class="pre">solver.param.string_list</span></code> in the input file.
+The number and the order of the keywords should be identical to those of the list of variables to optimize.</p>
+<p>The keywords should be embedded in the templates according to the format of the parameters.
+In the following example, the parameter values corresponding to <code class="docutils literal notranslate"><span class="pre">opt000</span></code> and <code class="docutils literal notranslate"><span class="pre">opt001</span></code> (e.g. 0.23) are formatted by the format style <code class="docutils literal notranslate"><span class="pre">(F7.4)</span></code> (7 letters in total with 4 digits below the floating point) such as <code class="docutils literal notranslate"><span class="pre">␣0.2300</span></code>.</p>
+<p>Note that if IFLAG and LSFLAG are not set to 0, the satleed side is also optimized.</p>
 <p>An example file is shown below.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>  <span class="mi">0</span>  <span class="mi">0</span>                          <span class="n">IPR</span> <span class="n">ISTART</span> <span class="n">LRFLAG</span>
-<span class="mi">1</span> <span class="mi">10</span>  <span class="mf">0.02</span>  <span class="mf">0.2</span>                  <span class="n">NSYM</span>  <span class="n">NSYMS</span> <span class="n">ASTEP</span> <span class="n">VSTEP</span>
-<span class="mi">5</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mi">2</span>                       <span class="n">NT0</span>  <span class="n">NSET</span> <span class="n">LSMAX</span> <span class="n">LLCUT</span>
-<span class="mi">5</span>                                <span class="n">NINSET</span>
-<span class="mf">1.0000</span> <span class="mf">0.0000</span>                  <span class="mi">1</span>      <span class="n">PQEX</span>
-<span class="mf">1.0000</span> <span class="mf">2.0000</span>                  <span class="mi">2</span>      <span class="n">PQEX</span>
-<span class="mf">1.0000</span> <span class="mf">1.0000</span>                  <span class="mi">3</span>      <span class="n">PQEX</span>
-<span class="mf">2.0000</span> <span class="mf">2.0000</span>                  <span class="mi">4</span>      <span class="n">PQEX</span>
-<span class="mf">2.0000</span> <span class="mf">0.0000</span>                  <span class="mi">5</span>      <span class="n">PQEX</span>
-<span class="mi">3</span>                                 <span class="n">NDIM</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="mi">1</span>  <span class="mi">0</span>  <span class="mi">0</span>                          <span class="n">IPR</span> <span class="n">ISTART</span> <span class="n">LRFLAG</span>
+ <span class="mi">1</span> <span class="mi">10</span>  <span class="mf">0.02</span>  <span class="mf">0.2</span>                  <span class="n">NSYM</span>  <span class="n">NSYMS</span> <span class="n">ASTEP</span> <span class="n">VSTEP</span>
+ <span class="mi">5</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mi">2</span>                       <span class="n">NT0</span>  <span class="n">NSET</span> <span class="n">LSMAX</span> <span class="n">LLCUT</span>
+ <span class="mi">5</span>                                <span class="n">NINSET</span>
+ <span class="mf">1.0000</span> <span class="mf">0.0000</span>                  <span class="mi">1</span>      <span class="n">PQEX</span>
+ <span class="mf">1.0000</span> <span class="mf">2.0000</span>                  <span class="mi">2</span>      <span class="n">PQEX</span>
+ <span class="mf">1.0000</span> <span class="mf">1.0000</span>                  <span class="mi">3</span>      <span class="n">PQEX</span>
+ <span class="mf">2.0000</span> <span class="mf">2.0000</span>                  <span class="mi">4</span>      <span class="n">PQEX</span>
+ <span class="mf">2.0000</span> <span class="mf">0.0000</span>                  <span class="mi">5</span>      <span class="n">PQEX</span>
+ <span class="mi">3</span>                                 <span class="n">NDIM</span>
 <span class="n">opt000</span> <span class="mf">0.0000</span> <span class="mf">0.0000</span>  <span class="mi">0</span>           <span class="n">DISP</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span>
-<span class="mf">0.0000</span> <span class="n">opt001</span> <span class="mf">0.0000</span>  <span class="mi">0</span>           <span class="n">DISP</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span>
-<span class="mf">0.0000</span> <span class="mf">0.0000</span> <span class="mf">0.0000</span>  <span class="mi">1</span>           <span class="n">DISP</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span>
-<span class="mf">0.0000</span> <span class="mf">0.0000</span> <span class="mf">0.0000</span>  <span class="mi">0</span>           <span class="n">DISP</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span>
-<span class="mf">0.0000</span>  <span class="mi">0</span>                         <span class="n">DVOPT</span>  <span class="n">LSFLAG</span>
-<span class="mi">3</span>  <span class="mi">0</span>  <span class="mi">0</span>                           <span class="n">MFLAG</span> <span class="n">NGRID</span> <span class="n">NIV</span>
-<span class="o">...</span>
+ <span class="mf">0.0000</span><span class="n">opt001</span> <span class="mf">0.0000</span>  <span class="mi">0</span>           <span class="n">DISP</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span>
+ <span class="mf">0.0000</span> <span class="mf">0.0000</span> <span class="mf">0.0000</span>  <span class="mi">1</span>           <span class="n">DISP</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span>
+ <span class="mf">0.0000</span> <span class="mf">0.0000</span> <span class="mf">0.0000</span>  <span class="mi">0</span>           <span class="n">DISP</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span>
+ <span class="mf">0.0000</span>  <span class="mi">0</span>                         <span class="n">DVOPT</span>  <span class="n">LSFLAG</span>
+ <span class="mi">3</span>  <span class="mi">0</span>  <span class="mi">0</span>                           <span class="n">MFLAG</span> <span class="n">NGRID</span> <span class="n">NIV</span>
+ <span class="o">...</span>
 </pre></div>
 </div>
 </section>
 </section>
 <section id="output-file">
 <h2>Output file<a class="headerlink" href="#output-file" title="Link to this heading">¶</a></h2>
-<p>In <code class="docutils literal notranslate"><span class="pre">leed</span></code>, the output files are stored in the folder with the MPI rank number.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">leed</span></code>, the output files are stored in the subfolder <code class="docutils literal notranslate"><span class="pre">LogXXXX_YYYY</span></code> for each parameter value that is created in the folder with the rank number within the <code class="docutils literal notranslate"><span class="pre">output_dir</span></code>.
+Here, <code class="docutils literal notranslate"><span class="pre">XXXX</span></code> denotes the step count, and <code class="docutils literal notranslate"><span class="pre">YYYY</span></code> denotes the identifier such as the replica number.</p>
 </section>
 </section>
 
@@ -120,7 +242,7 @@ Note that if IFLAG and LSFLAG are not set to 0, the satleed side is also optimiz
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

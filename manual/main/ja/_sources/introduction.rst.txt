@@ -27,7 +27,7 @@ odatse-LEEDとは
 
 Copyright (c) <2020-> The University of Tokyo. All rights reserved.
 
-本ソフトウェアは2020年度 東京大学物性研究所 ソフトウェア高度化プロジェクトの支援を受け開発されました。
+本ソフトウェアは2020, 2024年度 東京大学物性研究所 ソフトウェア高度化プロジェクトの支援を受け開発されました。
 ODAT-SEを引用する際には以下の文献を引用してください。
 
 "Data-analysis software framework 2DMAT and its application to experimental measurements for two-dimensional material structures",
@@ -54,7 +54,8 @@ Bibtex::
 
 odatse-LEED
 
-- v1.0-alpha: 2024-11-25
+- v1.0.0 : 2025-XX-XX
+- v1.0-alpha : 2024-11-25
 
 ODAT-SE
 

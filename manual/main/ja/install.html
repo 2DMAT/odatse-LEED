@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>odatse-LEED のインストール &#8212; ODAT-SE solver module: odatse-LEED 1.0-alpha ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
     <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
     <script src="_static/documentation_options.js?v=8755c3ba"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -39,24 +39,18 @@
 <h1>odatse-LEED のインストール<a class="headerlink" href="#odatse-leed" title="Link to this heading">¶</a></h1>
 <section id="id1">
 <h2>実行環境・必要なパッケージ<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>python 3.9 以上</p></li>
+<li><p>pythonパッケージ</p>
 <ul>
-<li><p>python 3.9 以上</p>
-<blockquote>
-<div><ul>
-<li><p>必要なpythonパッケージ</p>
-<blockquote>
-<div><ul class="simple">
 <li><p>numpy (&gt;= 1.14)</p></li>
 <li><p>pydantic (&gt;= 2.0)</p></li>
+<li><p>fortranformat</p></li>
+<li><p>ODAT-SE (&gt;=3.0)</p></li>
 </ul>
-</div></blockquote>
 </li>
-</ul>
-</div></blockquote>
-</li>
-<li><p>ODAT-SE version 3.0 以降</p></li>
 <li><p>SATLEED</p>
-<ul class="simple">
+<ul>
 <li><p>コンパイルには Fortranコンパイラが必要</p></li>
 </ul>
 </li>
@@ -78,31 +72,22 @@ $<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </spa
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">--user</span></code> オプションを付けるとローカル (<code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>) にインストールできます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Python 3.7未満の環境では以下のようなエラーが発生します。本パッケージではPython 3.9以上を利用するようにしてください。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Directory<span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>installable.<span class="w"> </span>File<span class="w"> </span><span class="s1">&#39;setup.py&#39;</span><span class="w"> </span>not<span class="w"> </span>found.
+</pre></div>
+</div>
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.[all]</span></code> を実行するとオプションのパッケージも同時にインストールします。</p>
-</li>
-</ul>
-</li>
-<li><p>SATLEED をインストールする</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">SATLEED</span></code> のソースコードは以下の URL から取得できます。</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>wget<span class="w"> </span>http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip
-</pre></div>
-</div>
-</li>
-<li><p>ファイルを展開し、所定の手続きに従ってコンパイルします。</p>
-<p><code class="docutils literal notranslate"><span class="pre">SATLEED</span></code> は計算したい系の詳細によってソースコードのパラメータを適宜書き換える必要があります。 <code class="docutils literal notranslate"><span class="pre">sample/leed</span></code> にあるサンプルを実行する場合の書き換えとコンパイルを自動で行うスクリプト <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> が用意されています。</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sample/mapper
-$<span class="w"> </span>sh<span class="w"> </span>./setup.sh
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> を実行すると、 <code class="docutils literal notranslate"><span class="pre">leedsatl</span></code> ディレクトリに <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> と <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> が作成されます。</p>
 </li>
 </ul>
 </li>
 <li><p>odatse-LEED をインストールする</p>
 <p>odatse-LEED のソースファイルは GitHub リポジトリから取得できます。以下の手順でリポジトリをクローンした後、pip コマンドを実行してインストールします。</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/2DMAT/odatse-LEED.git
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>../
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/2DMAT/odatse-LEED.git
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>odatse-LEED
 $<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
@@ -110,6 +95,25 @@ $<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </spa
 <p><code class="docutils literal notranslate"><span class="pre">--user</span></code> オプションを付けるとローカル (<code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>) にインストールできます。</p>
 <p>odatse-LEED のライブラリと、実行コマンド <code class="docutils literal notranslate"><span class="pre">odatse-LEED</span></code> がインストールされます。</p>
 </div></blockquote>
+</li>
+<li><p>SATLEED をインストールする</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">SATLEED</span></code> のソースコードは以下の URL から取得できます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">icts</span><span class="o">.</span><span class="n">hkbu</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">hk</span><span class="o">/</span><span class="n">VanHove_files</span><span class="o">/</span><span class="n">leed</span><span class="o">/</span><span class="n">leedsatl</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
+</div>
+<p>ファイルを展開し、所定の手続きに従ってコンパイルします。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SATLEED</span></code> は計算したい系の詳細によってソースコードのパラメータを適宜書き換える必要があります。
+ステップ2 で取得した odatse-LEED のソースファイルの <code class="docutils literal notranslate"><span class="pre">sample/satleed</span></code> ディレクトリに、サンプルを実行する場合の書き換え <code class="docutils literal notranslate"><span class="pre">leedsatl.patch</span></code> とコンパイルを自動で行うスクリプト <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> が用意されているので、それを利用しインストールすることもできます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>odatse-LEED/sample/satleed
+$<span class="w"> </span>sh<span class="w"> </span>./setup.sh
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> を実行すると、現在のディレクトリに <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> と <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> が作成されます。</p>
+<p>コンパイラやコンパイルオプションを変更する場合は <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> を編集してください。</p>
+</li>
+</ul>
 </li>
 </ol>
 </section>
@@ -148,7 +152,7 @@ LEEDの解析を行うには次の2通りの方法があります。</p>
 
     <div class="footer" role="contentinfo">
     &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

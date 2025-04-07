@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>グリッド型探索 &#8212; ODAT-SE solver module: odatse-LEED 1.0-alpha ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=47202671" />
     <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
     <script src="../_static/documentation_options.js?v=8755c3ba"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -46,7 +46,7 @@
 フォルダには以下のファイルが格納されています。</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">base</span></code> ディレクトリ</p>
-<p>メインプログラムでの計算を進めるための参照ファイルを格納するディレクトリ。参照ファイルは <code class="docutils literal notranslate"><span class="pre">exp.d</span></code>, <code class="docutils literal notranslate"><span class="pre">rfac.d</span></code>, <code class="docutils literal notranslate"><span class="pre">short.t</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed.o</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code> です。</p>
+<p>メインプログラムでの計算を進めるための参照ファイルを格納するディレクトリ。参照ファイルは <code class="docutils literal notranslate"><span class="pre">exp.d</span></code>, <code class="docutils literal notranslate"><span class="pre">rfac.d</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code> です。</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">input.toml</span></code></p>
 <p>メインプログラムの入力ファイル</p>
@@ -55,7 +55,7 @@
 <p>探索グリッドのデータ</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ref_ColorMap.txt</span></code></p>
-<p>計算が正しく実行されたか確認するためのファイル(本チュートリアルを行うことで得られる <code class="docutils literal notranslate"><span class="pre">ColorMap.txt</span></code> の回答)。</p>
+<p>計算結果の参照値。計算が正しく実行されたか確認するための output/ColorMap の参照データ。</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">prepare.sh</span></code> , <code class="docutils literal notranslate"><span class="pre">do.sh</span></code></p>
 <p>本チュートリアルを一括計算するために準備されたスクリプト</p>
@@ -66,23 +66,27 @@
 <section id="id3">
 <h2>参照ファイルの説明<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code>, <code class="docutils literal notranslate"><span class="pre">rfac.d</span></code> は satleed のパラメータファイルです。
-最適化する原子座標は <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code> の中で <code class="docutils literal notranslate"><span class="pre">opt000</span></code>, <code class="docutils literal notranslate"><span class="pre">opt001</span></code> のようにキーワードとして埋め込みます。
-<code class="docutils literal notranslate"><span class="pre">exp.d</span></code> は参照する実験データです。 <code class="docutils literal notranslate"><span class="pre">short.t</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed.o</span></code> は、あらかじめ <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> を使って求めた入力データです。</p>
+最適化する原子座標は <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code> の中で <code class="docutils literal notranslate"><span class="pre">opt000</span></code>, <code class="docutils literal notranslate"><span class="pre">opt001</span></code> のようにキーワードとして埋め込みます。
+<code class="docutils literal notranslate"><span class="pre">exp.d</span></code> は参照する実験データです。</p>
 <p>実際に探索するグリッドは <code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code> で与えます。
 サンプルでは <code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code> の中身は以下のようになっています。</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span> <span class="o">-</span><span class="mf">0.1</span>   <span class="mi">0</span>
-<span class="mi">1</span> <span class="o">-</span><span class="mf">0.05</span>  <span class="mi">0</span>
-<span class="mi">2</span> <span class="mi">0</span>      <span class="mi">0</span>
-<span class="mi">3</span> <span class="mf">0.05</span>   <span class="mi">0</span>
-<span class="mi">4</span> <span class="mf">0.1</span>    <span class="mi">0</span>
-<span class="mi">5</span> <span class="o">-</span><span class="mf">0.1</span>   <span class="mf">0.05</span>
-<span class="mi">6</span> <span class="o">-</span><span class="mf">0.05</span>  <span class="mf">0.05</span>
-<span class="mi">7</span> <span class="mi">0</span>      <span class="mf">0.05</span>
-<span class="mi">8</span> <span class="mf">0.05</span>   <span class="mf">0.05</span>
-<span class="mi">9</span> <span class="mf">0.1</span>    <span class="mf">0.05</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">-</span><span class="mf">0.490000</span> <span class="mf">0.777500</span>
+<span class="mi">2</span> <span class="o">-</span><span class="mf">0.490000</span> <span class="mf">0.977500</span>
+<span class="mi">3</span> <span class="o">-</span><span class="mf">0.490000</span> <span class="mf">1.177500</span>
+<span class="mi">4</span> <span class="o">-</span><span class="mf">0.490000</span> <span class="mf">1.377500</span>
+<span class="mi">5</span> <span class="o">-</span><span class="mf">0.490000</span> <span class="mf">1.577500</span>
+<span class="o">...</span>
 </pre></div>
 </div>
-<p>1列目が通し番号、2列目以降は <code class="docutils literal notranslate"><span class="pre">base/tleed4.i</span></code> に入る <code class="docutils literal notranslate"><span class="pre">opt000</span></code> , <code class="docutils literal notranslate"><span class="pre">opt001</span></code> の値が順に指定されています。</p>
+<p>1列目が通し番号、2列目以降は <code class="docutils literal notranslate"><span class="pre">base/tleed5.i</span></code> に入る <code class="docutils literal notranslate"><span class="pre">opt000</span></code> , <code class="docutils literal notranslate"><span class="pre">opt001</span></code> の値が順に指定されています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><code class="docutils literal notranslate"><span class="pre">MeshData.txt</span></code> を作成するスクリプト <code class="docutils literal notranslate"><span class="pre">make_meshdata.py</span></code> が用意されています。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>make_meshdata.py<span class="w"> </span>&gt;<span class="w"> </span>MeshData.txt
+</pre></div>
+</div>
+<p>を実行するとメッシュデータが作成されます。</p>
+</div>
 </section>
 <section id="id4">
 <h2>入力ファイルの説明<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
@@ -96,34 +100,47 @@
 <span class="p">[</span><span class="n">solver</span><span class="p">]</span>
 <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leed&quot;</span>
 <span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">]</span>
-<span class="n">path_to_solver</span> <span class="o">=</span> <span class="s2">&quot;./leedsatl/satl2.exe&quot;</span>
+<span class="n">path_to_first_solver</span> <span class="o">=</span> <span class="s2">&quot;../satleed/satl1.exe&quot;</span>
+<span class="n">path_to_second_solver</span> <span class="o">=</span> <span class="s2">&quot;../satleed/satl2.exe&quot;</span>
+<span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
+<span class="n">string_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;opt000&quot;</span><span class="p">,</span> <span class="s2">&quot;opt001&quot;</span><span class="p">]</span>
 <span class="p">[</span><span class="n">solver</span><span class="o">.</span><span class="n">reference</span><span class="p">]</span>
 <span class="n">path_to_base_dir</span> <span class="o">=</span> <span class="s2">&quot;./base&quot;</span>
+<span class="n">rfactor</span> <span class="o">=</span> <span class="s2">&quot;satleed&quot;</span>
 
 <span class="p">[</span><span class="n">algorithm</span><span class="p">]</span>
 <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mapper&quot;</span>
 <span class="n">label_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">]</span>
 <span class="p">[</span><span class="n">algorithm</span><span class="o">.</span><span class="n">param</span><span class="p">]</span>
 <span class="n">mesh_path</span> <span class="o">=</span> <span class="s2">&quot;./MeshData.txt&quot;</span>
+
+<span class="p">[</span><span class="n">runner</span><span class="p">]</span>
+<span class="n">ignore_error</span> <span class="o">=</span> <span class="n">true</span>
 </pre></div>
 </div>
 <p>最初に <code class="docutils literal notranslate"><span class="pre">[base]</span></code> セクションについて説明します。</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">dimension</span></code> は最適化したい変数の個数で、今の場合は <code class="docutils literal notranslate"><span class="pre">base/tleed4.i</span></code> で説明したように2つの変数の最適化を行うので、<code class="docutils literal notranslate"><span class="pre">2</span></code> を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dimension</span></code> は最適化したい変数の個数です。今の場合は <code class="docutils literal notranslate"><span class="pre">base/tleed5.i</span></code> で説明したように2つの変数の最適化を行うので、 <code class="docutils literal notranslate"><span class="pre">2</span></code> を指定します。</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">output_dir</span></code> は出力先のディレクトリ名です。省略した場合はプログラムを実行したディレクトリになります。</p></li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">[solver]</span></code> セクションではメインプログラムの内部で使用するソルバーとその設定を指定します。</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> は使用したいソルバーの名前です。 <code class="docutils literal notranslate"><span class="pre">leed</span></code> に固定されています。</p></li>
 </ul>
-<p>ソルバーの設定は、サブセクションの <code class="docutils literal notranslate"><span class="pre">[solver.config]</span></code>, <code class="docutils literal notranslate"><span class="pre">[solver.reference]</span></code> で行います。</p>
-<p><code class="docutils literal notranslate"><span class="pre">[solver.config]</span></code> セクションではメインプログラム内部で呼び出す <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> についてのオプションを指定します。</p>
+<p>ソルバーの設定は、サブセクションの <code class="docutils literal notranslate"><span class="pre">[solver.config]</span></code>, <code class="docutils literal notranslate"><span class="pre">[solver.param]</span></code>, <code class="docutils literal notranslate"><span class="pre">[solver.reference]</span></code> で行います。</p>
+<p><code class="docutils literal notranslate"><span class="pre">[solver.config]</span></code> セクションではメインプログラム内部で呼び出す <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code>,  <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> についてのオプションを指定します。</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">path_to_solver</span></code> は <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> のコマンド名です。パスを指定するか、コマンド名をPATH環境変数から探索します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path_to_first_solver</span></code> は <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> のコマンド名です。パスを指定するか、コマンド名をPATH環境変数から探索します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path_to_second_solver</span></code> は <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> のコマンド名です。パスを指定するか、コマンド名をPATH環境変数から探索します。</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">[solver.param]</span></code> セクションではパラメータについての指定を行います。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">string_list</span></code> は埋め込みキーワードのリストを指定します。</p></li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">[solver.reference]</span></code> セクションでは参照データについての指定を行います。</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">path_to_base_dir</span></code> は参照データが置いてあるディレクトリ名を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rfactor</span></code> は R-factor の定義を指定します。デフォルトは <code class="docutils literal notranslate"><span class="pre">rpe</span></code> (Pendry R-factor) です。この例では <code class="docutils literal notranslate"><span class="pre">satleed</span></code> を指定して、SATLEED が計算した R-factor の値を使用します。</p></li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">[algorithm]</span></code> セクションでは、使用するアルゴリスムとその設定をします。</p>
 <ul class="simple">
@@ -134,50 +151,51 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">mesh_path</span></code> は探索グリッドを記述したファイルを指定します。</p></li>
 </ul>
+<p><code class="docutils literal notranslate"><span class="pre">[runner]</span></code> セクションでは外部プログラム実行についての指定を行います。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ignore_error</span></code> を true に指定した場合、外部プログラムの実行と値の評価に関するエラーは NaN として扱い、計算を続行します。</p></li>
+</ul>
 <p>その他、入力ファイルで指定可能なパラメータの詳細については入力ファイルの章をご覧ください。</p>
 </section>
 <section id="id5">
 <h2>計算実行<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
-<p>最初にサンプルファイルが置いてあるフォルダへ移動します(以下、本ソフトウェアをダウンロードしたディレクトリ直下にいることを仮定します).</p>
+<p>あらかじめ <code class="docutils literal notranslate"><span class="pre">sample/satleed</span></code> ディレクトリ内で <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> を実行して SATLEED をコンパイルし、 <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> と <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> を作成しておきます。</p>
+<p>サンプルファイルが置いてあるフォルダへ移動します。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd sample/mapper
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> を使って <code class="docutils literal notranslate"><span class="pre">satleed</span></code> のダウンロードとコンパイルを行います。</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sh setup.sh
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">leedsatl</span></code> ディレクトリに <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> と <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> が作成されます。
-そのあとに、メインプログラムを実行します(計算時間は通常のPCで数秒程度で終わります)。</p>
+<p>メインプログラムを実行します。次のコマンドではプロセス数4のMPI並列を用いた計算を行っています。計算は通常のPCで数分程度で終わります。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mpiexec -np 4 odatse-LEED input.toml | tee log.txt
 </pre></div>
 </div>
-<p>ここではプロセス数4のMPI並列を用いた計算を行っています。
-実行すると、 <code class="docutils literal notranslate"><span class="pre">output</span></code> ディレクトリとその下に各ランクのフォルダが作成され、計算結果が出力されます。また、以下の様なログが標準出力に表示されます。</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Iteration</span> <span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">33</span>
-<span class="n">Read</span> <span class="n">experiment</span><span class="o">.</span><span class="n">txt</span>
-<span class="n">mesh</span> <span class="n">before</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]</span>
-<span class="n">z1</span> <span class="o">=</span>  <span class="mf">6.00000</span>
-<span class="n">z2</span> <span class="o">=</span>  <span class="mf">6.00000</span>
-<span class="p">[</span><span class="s1">&#39; 6.00000&#39;</span><span class="p">,</span> <span class="s1">&#39; 6.00000&#39;</span><span class="p">]</span>
-<span class="n">PASS</span> <span class="p">:</span> <span class="n">degree</span> <span class="ow">in</span> <span class="n">lastline</span> <span class="o">=</span> <span class="mf">7.0</span>
-<span class="n">PASS</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">calculated_list</span><span class="p">)</span> <span class="mi">70</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">convolution_I_calculated_list</span><span class="p">)</span><span class="mi">70</span>
-<span class="n">R</span><span class="o">-</span><span class="n">factor</span> <span class="o">=</span> <span class="mf">0.04785241875354398</span>
+<p>実行すると、 <code class="docutils literal notranslate"><span class="pre">output</span></code> ディレクトリとその下に各ランクのフォルダが作成され、計算結果が出力されます。また、以下の様なログが標準出力に表示されます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span>            <span class="p">:</span> <span class="n">mapper</span>
+<span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="s1">&#39;z2&#39;</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">mesh_path</span> <span class="p">:</span> <span class="o">./</span><span class="n">MeshData</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">121</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">2</span><span class="o">/</span><span class="mi">121</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">3</span><span class="o">/</span><span class="mi">121</span>
+<span class="n">Iteration</span> <span class="p">:</span> <span class="mi">4</span><span class="o">/</span><span class="mi">121</span>
 <span class="o">...</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">z1</span></code>, <code class="docutils literal notranslate"><span class="pre">z2</span></code> に各メッシュでの候補パラメータと、その時の <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> が出力されます。
 最終的にグリッド上の全ての点で計算された <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> は、 <code class="docutils literal notranslate"><span class="pre">ColorMap.txt</span></code> に出力されます。
 今回の場合は</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">0.100000</span> <span class="mf">0.000000</span> <span class="mf">0.319700</span>
-<span class="o">-</span><span class="mf">0.050000</span> <span class="mf">0.000000</span> <span class="mf">0.212100</span>
-<span class="mf">0.000000</span> <span class="mf">0.000000</span> <span class="mf">0.189500</span>
-<span class="mf">0.050000</span> <span class="mf">0.000000</span> <span class="mf">0.502300</span>
-<span class="mf">0.100000</span> <span class="mf">0.000000</span> <span class="mf">0.941600</span>
-<span class="o">-</span><span class="mf">0.100000</span> <span class="mf">0.050000</span> <span class="mf">0.318600</span>
-<span class="o">-</span><span class="mf">0.050000</span> <span class="mf">0.050000</span> <span class="mf">0.206600</span>
-<span class="mf">0.000000</span> <span class="mf">0.050000</span> <span class="mf">0.190500</span>
-<span class="mf">0.050000</span> <span class="mf">0.050000</span> <span class="mf">0.506200</span>
-<span class="mf">0.100000</span> <span class="mf">0.050000</span> <span class="mf">0.933200</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">0.490000</span> <span class="mf">0.777500</span> <span class="mf">0.861000</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">0.977500</span> <span class="mf">1.004700</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">1.177500</span> <span class="mf">0.909900</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">1.377500</span> <span class="mf">0.896600</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">1.577500</span> <span class="mf">1.009500</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">1.777500</span> <span class="mf">0.779100</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">1.977500</span> <span class="mf">0.944200</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">2.177500</span> <span class="mf">0.966500</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">2.377500</span> <span class="mf">0.867000</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">2.577500</span> <span class="mf">0.907000</span>
+<span class="o">-</span><span class="mf">0.490000</span> <span class="mf">2.777500</span> <span class="mf">0.924100</span>
+<span class="o">-</span><span class="mf">0.390000</span> <span class="mf">0.777500</span> <span class="mf">0.801900</span>
+<span class="o">-</span><span class="mf">0.390000</span> <span class="mf">0.977500</span> <span class="mf">0.793900</span>
+<span class="o">...</span>
 </pre></div>
 </div>
 <p>のように得られます。1列目、2列目に <code class="docutils literal notranslate"><span class="pre">opt000</span></code>, <code class="docutils literal notranslate"><span class="pre">opt001</span></code> の値が、3列目に <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> が記載されます。
@@ -210,12 +228,12 @@ fi
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 plot_colormap_2d.py
 </pre></div>
 </div>
-<p>作成された図を見ると、(-0.02, ±0.1) 付近に最小値を持っていることがわかります。</p>
+<p>作成された図を見ると、(0.0, 1.75) 付近に最小値を持っていることがわかります。</p>
 <blockquote>
 <div><figure class="align-default" id="id7">
-<img alt="../_images/mapper.png" src="../_images/mapper.png" />
+<img alt="../_images/ColorMapFig.png" src="../_images/ColorMapFig.png" />
 <figcaption>
-<p><span class="caption-text">2次元パラメータ空間上での <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> 。</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+<p><span class="caption-text">2次元パラメータ空間上での R-factor の値。(21 x 21 のメッシュで計算)</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </div></blockquote>
@@ -238,7 +256,7 @@ fi
 
     <div class="footer" role="contentinfo">
     &#169; 著作権 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

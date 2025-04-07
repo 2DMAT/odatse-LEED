@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Installation of odatse-LEED &#8212; ODAT-SE solver module: odatse-LEED 1.0-alpha documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
     <script src="_static/documentation_options.js?v=1e4f7814"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -39,20 +39,18 @@
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>Python3 (&gt;=3.9)</p>
-<ul>
+<li><p>Python3 (&gt;=3.9)</p></li>
 <li><p>The following Python packages are required.</p>
 <ul>
 <li><p>numpy &gt;= 1.14</p></li>
 <li><p>pydantic &gt;= 2.0</p></li>
+<li><p>fortranformat</p></li>
+<li><p>ODAT-SE &gt;= 3.0</p></li>
 </ul>
 </li>
-<li><p>ODAT-SE version 3.0 and later</p></li>
 <li><p>SATLEED</p>
 <ul>
 <li><p>A Fortran compiler is required for compilation.</p></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -73,6 +71,13 @@ $<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </spa
 </pre></div>
 </div>
 <p>You may add <code class="docutils literal notranslate"><span class="pre">--user</span></code> option to install ODAT-SE locally (in <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For Python versions below 3.7, you will get the following error. Please use Python 3.9 or higher for this package.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Directory<span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>installable.<span class="w"> </span>File<span class="w"> </span><span class="s1">&#39;setup.py&#39;</span><span class="w"> </span>not<span class="w"> </span>found.
+</pre></div>
+</div>
+</div>
 <p>If you run the following command instead, optional packages will also be installed at the same time.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.<span class="o">[</span>all<span class="o">]</span>
 </pre></div>
@@ -80,35 +85,38 @@ $<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </spa
 </li>
 </ul>
 </li>
-<li><p>Install SATLEED</p>
-<ul>
-<li><p>The source archive is available from the following URL.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>wget<span class="w"> </span>http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip
-</pre></div>
-</div>
-</li>
-<li><p>Unpack the source package, and compile the source.</p>
-<p>It is necessary to modify parameters in the source files of <code class="docutils literal notranslate"><span class="pre">SATLEED</span></code> according to the details of the system under consideration.
-For the present tutorial, a script <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> is prepared that automatically modifies the parameters and compile the source files.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sample/mapper
-$<span class="w"> </span>sh<span class="w"> </span>./setup.sh
-</pre></div>
-</div>
-<p>By running <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code>, the executable files <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> will be generated in <code class="docutils literal notranslate"><span class="pre">leedsatl</span></code> directory.</p>
-</li>
-</ul>
-</li>
 <li><p>Install odatse-LEED</p>
 <ul>
 <li><p>From source files:</p>
 <p>The source files of odatse-LEED are available from the GitHub repository. After obtaining the source files, install odatse-LEED using <code class="docutils literal notranslate"><span class="pre">pip</span></code> command as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/2DMAT/odatse-LEED.git
-$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>ODAT-SE
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>../
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/2DMAT/odatse-LEED.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>odatse-LEED
 $<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
 </div>
-<p>You may add <code class="docutils literal notranslate"><span class="pre">--user</span></code> option to install the package locally (in <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>).</p>
-<p>Then, the library of odatse-LEED and the command <code class="docutils literal notranslate"><span class="pre">odatse-LEED</span></code> wil be installed.</p>
+<p>You may add <code class="docutils literal notranslate"><span class="pre">--user</span></code> option to install the package locally (in <code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>).
+Then, the library of odatse-LEED and the command <code class="docutils literal notranslate"><span class="pre">odatse-LEED</span></code> wil be installed.</p>
+</li>
+</ul>
+</li>
+<li><p>Install SATLEED</p>
+<ul>
+<li><p>The source archive is available from the following URL.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip
+</pre></div>
+</div>
+<p>Unpack the source package, and compile the source.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SATLEED</span></code> requires modifying source code parameters according to the details of the system you want to calculate.
+The source files of odatse-LEED include <code class="docutils literal notranslate"><span class="pre">leedsatl.patch</span></code> for modifying the source code and <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> script for automatic compilation in the <code class="docutils literal notranslate"><span class="pre">sample/satleed</span></code> directory.
+You can use these files to install SATLEED.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>odatse-LEED/sample/satleed
+$<span class="w"> </span>sh<span class="w"> </span>./setup.sh
+</pre></div>
+</div>
+<p>By running <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code>, the executable files <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code> will be generated in the current directory.</p>
+<p>You may edit <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> to use other compilers or to apply different compiler options.</p>
 </li>
 </ul>
 </li>
@@ -153,7 +161,7 @@ A flexible use would be possible, for example, to include data generation within
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

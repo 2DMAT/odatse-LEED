@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Analyses by user programs &#8212; ODAT-SE solver module: odatse-LEED 1.0-alpha documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/haiku.css?v=fce32b03" />
     <script src="../_static/documentation_options.js?v=1e4f7814"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -50,13 +50,10 @@ The following files are stored in the folder.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">base</span></code></p>
 <p>Directory that contains reference files to proceed with calculations in the main program.
-The reference files include: <code class="docutils literal notranslate"><span class="pre">exp.d</span></code>, <code class="docutils literal notranslate"><span class="pre">rfac.d</span></code>, <code class="docutils literal notranslate"><span class="pre">short.t</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed.o</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code>, and <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code>.</p>
+The reference files include: <code class="docutils literal notranslate"><span class="pre">exp.d</span></code>, <code class="docutils literal notranslate"><span class="pre">rfac.d</span></code>, <code class="docutils literal notranslate"><span class="pre">tleed4.i</span></code>, and <code class="docutils literal notranslate"><span class="pre">tleed5.i</span></code>.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ref.txt</span></code></p>
-<p>A file containing the answers you want to seek in this tutorial.</p>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">simple2.py</span></code></p>
-<p>Another version of source file of the main program. The parameters are embedded in the program as a dict.</p>
+<p>A reference file for the result of the calculation.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">prepare.sh</span></code> , <code class="docutils literal notranslate"><span class="pre">do.sh</span></code></p>
 <p>Script prepared for doing all calculation of this tutorial</p>
@@ -68,9 +65,9 @@ The reference files include: <code class="docutils literal notranslate"><span cl
 <h2>Description of main program<a class="headerlink" href="#description-of-main-program" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">simple.py</span></code> is a simple program for the analyses using odatse-LEED module.
 The entire source file is shown as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">odatse</span>
-<span class="kn">import</span> <span class="nn">odatse.algorithm.min_search</span>
-<span class="kn">from</span> <span class="nn">odatse.extra.LEED</span> <span class="kn">import</span> <span class="n">Solver</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">odatse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">odatse.algorithm.min_search</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">odatse.extra.LEED</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solver</span>
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;input.toml&quot;</span><span class="p">)</span>
 
@@ -102,104 +99,51 @@ The entire source file is shown as follows:</p>
 </li>
 </ul>
 <p>After creating the instances of Solver, Runner, and Algorithm in this order, we invoke <code class="docutils literal notranslate"><span class="pre">main()</span></code> method of the Algorithm class to start analyses.</p>
-<p>In the above program, the input parameters are read from a file in TOML format. It is also possible to take the parameters in the form of dictionary.
-<code class="docutils literal notranslate"><span class="pre">simple2.py</span></code> is anther version of the main program in which the parameters are embedded in the program. The entire source file is shown below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">odatse</span>
-<span class="kn">import</span> <span class="nn">odatse.algorithm.min_search</span>
-<span class="kn">from</span> <span class="nn">odatse.extra.LEED</span> <span class="kn">import</span> <span class="n">Solver</span>
-
-<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="s2">&quot;output_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;solver&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;path_to_solver&quot;</span><span class="p">:</span> <span class="s2">&quot;./leedsatl/satl2.exe&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;path_to_base_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;./base&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;algorithm&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;label_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">,</span> <span class="s2">&quot;z2&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;param&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;min_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span>
-            <span class="s2">&quot;max_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">],</span>
-            <span class="s2">&quot;initial_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
-        <span class="p">},</span>
-
-    <span class="p">},</span>
-<span class="p">}</span>
-
-<span class="n">info</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Info</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-
-<span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-<span class="n">runner</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">Runner</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
-<span class="n">alg</span> <span class="o">=</span> <span class="n">odatse</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">min_search</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">runner</span><span class="p">)</span>
-<span class="n">alg</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>An instance of Info class is created by passing a set of parameters in a dict form.
-It is also possible to generate the parameters within the program before passing to the class.</p>
+<p>In the above program, the input parameters are read from a file in TOML format. It is also possible to take the parameters in the form of dictionary.</p>
 </section>
 <section id="input-files">
 <h2>Input files<a class="headerlink" href="#input-files" title="Link to this heading">¶</a></h2>
-<p>The input file for the main program, <code class="docutils literal notranslate"><span class="pre">input.toml</span></code>, contains parameters for the direct problem solver and the inverse problem algorithm. The contents of the <code class="docutils literal notranslate"><span class="pre">base</span></code> and <code class="docutils literal notranslate"><span class="pre">solver</span></code> sections are the same as those in the previous example.
-The parameters for the Nelder-Mead method should be specified in the <code class="docutils literal notranslate"><span class="pre">algorithm.param</span></code> section, while <code class="docutils literal notranslate"><span class="pre">algorithm.name</span></code> for the type of algorithm is ignored.</p>
+<p>The input file for the main program, <code class="docutils literal notranslate"><span class="pre">input.toml</span></code>, contains parameters for the direct problem solver and the inverse problem algorithm. The contents of the <code class="docutils literal notranslate"><span class="pre">base</span></code> and <code class="docutils literal notranslate"><span class="pre">solver</span></code> sections are the same as those in the previous example.</p>
+<p>The parameters for the Nelder-Mead method should be specified in the <code class="docutils literal notranslate"><span class="pre">algorithm.param</span></code> section, while <code class="docutils literal notranslate"><span class="pre">algorithm.name</span></code> for the type of algorithm is ignored.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">min_list</span></code> and <code class="docutils literal notranslate"><span class="pre">max_list</span></code> specifies the search region in the form of the lower and upper bounds of the parameters as lists.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">initial_list</span></code> specifies the initial values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">initial_list</span></code> and <code class="docutils literal notranslate"><span class="pre">initial_scale_list</span></code> specify the initial simplex. For the two-parameter case, when <code class="docutils literal notranslate"><span class="pre">initial_list</span> <span class="pre">=</span> <span class="pre">[z1,</span> <span class="pre">z2]</span></code> and <code class="docutils literal notranslate"><span class="pre">initial_scale_list</span> <span class="pre">=</span> <span class="pre">[dz1,</span> <span class="pre">dz2]</span></code> are specified, a triangle is taken as an initial simplex that has the vertices at <code class="docutils literal notranslate"><span class="pre">[z1,</span> <span class="pre">z2]</span></code>, <code class="docutils literal notranslate"><span class="pre">[z1+dz1,</span> <span class="pre">z2]</span></code>, and <code class="docutils literal notranslate"><span class="pre">[z1,</span> <span class="pre">z2+dz2]</span></code>.</p></li>
 </ul>
 </section>
 <section id="calculation-execution">
 <h2>Calculation execution<a class="headerlink" href="#calculation-execution" title="Link to this heading">¶</a></h2>
-<p>First, move to the folder where the sample files are located. (We assume that you are directly under the directory where you downloaded this software.)</p>
+<p>Before running the sample program, you need to run <code class="docutils literal notranslate"><span class="pre">setup.sh</span></code> in the <code class="docutils literal notranslate"><span class="pre">sample/satleed</span></code> directory to compile SATLEED and generate <code class="docutils literal notranslate"><span class="pre">satl1.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">satl2.exe</span></code>.</p>
+<p>Move to the directory in which sample files are located:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd sample/user_program
 </pre></div>
 </div>
-<p>Copy the SATLEED programs that have been compiled in the grid search tutorial.
-Otherwise, run <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">setup.sh</span></code> in the <code class="docutils literal notranslate"><span class="pre">sample/mapper</span></code> directory to generate <code class="docutils literal notranslate"><span class="pre">leedsatl/satl1.exe</span></code> and <code class="docutils literal notranslate"><span class="pre">leedsatl/satl2.exe</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir leedsatl
-$ cp ../mapper/leedsatl/satl2.exe leedsatl/
-</pre></div>
-</div>
-<p>Then, run the main program. The computation time will take only a few seconds on a normal PC.</p>
+<p>Then, run the main program. The computation time will take only a few minutes on a normal PC.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 simple.py | tee log.txt
 </pre></div>
 </div>
 <p>The standard output will be shown like as follows.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Optimization</span> <span class="n">terminated</span> <span class="n">successfully</span><span class="o">.</span>
-         <span class="n">Current</span> <span class="n">function</span> <span class="n">value</span><span class="p">:</span> <span class="mf">0.157500</span>
-         <span class="n">Iterations</span><span class="p">:</span> <span class="mi">29</span>
-         <span class="n">Function</span> <span class="n">evaluations</span><span class="p">:</span> <span class="mi">63</span>
-<span class="n">iteration</span><span class="p">:</span> <span class="mi">29</span>
-<span class="nb">len</span><span class="p">(</span><span class="n">allvecs</span><span class="p">):</span> <span class="mi">30</span>
-<span class="n">step</span><span class="p">:</span> <span class="mi">0</span>
-<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
-<span class="n">step</span><span class="p">:</span> <span class="mi">1</span>
-<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
-<span class="n">step</span><span class="p">:</span> <span class="mi">2</span>
-<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
-<span class="n">step</span><span class="p">:</span> <span class="mi">3</span>
-<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
-<span class="n">step</span><span class="p">:</span> <span class="mi">4</span>
-<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span>  <span class="mf">0.1</span><span class="p">]</span>
-<span class="n">step</span><span class="p">:</span> <span class="mi">5</span>
-<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.0375</span>  <span class="o">-</span><span class="mf">0.05625</span><span class="p">]</span>
-<span class="n">step</span><span class="p">:</span> <span class="mi">6</span>
-<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.0375</span>  <span class="o">-</span><span class="mf">0.05625</span><span class="p">]</span>
-<span class="n">step</span><span class="p">:</span> <span class="mi">7</span>
-<span class="n">allvecs</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.0375</span>  <span class="o">-</span><span class="mf">0.05625</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">label_list</span>      <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;z1&#39;</span><span class="p">,</span> <span class="s1">&#39;z2&#39;</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">min_list</span>  <span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">max_list</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.75</span><span class="p">]</span>
+<span class="n">param</span><span class="o">.</span><span class="n">initial_list</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">]</span>
+<span class="n">minimize</span><span class="o">.</span><span class="n">initial_scale_list</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">]</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.18</span>  <span class="mf">1.75</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.9422</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.14</span>  <span class="mf">1.72</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.8607</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.12</span>  <span class="mf">1.745</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.7262</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.03</span>  <span class="mf">1.6975</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.4055</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.01</span>  <span class="mf">1.7225</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.3186</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.01</span>  <span class="mf">1.7225</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.3186</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.045</span> <span class="mf">1.71875</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.2953</span>
+<span class="nb">eval</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.025</span> <span class="mf">1.74375</span><span class="p">],</span> <span class="n">fun</span><span class="o">=</span><span class="mf">0.2157</span>
 <span class="o">...</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">z1</span></code> and <code class="docutils literal notranslate"><span class="pre">z2</span></code> are the candidate parameters at each step, and <code class="docutils literal notranslate"><span class="pre">R-factor</span></code> is the function value at that point.
 The final estimated parameters will be written to <code class="docutils literal notranslate"><span class="pre">output/res.dat</span></code>.
 In the current case, the following result will be obtained:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fx</span> <span class="o">=</span> <span class="mf">0.1575</span>
-<span class="n">z1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.01910402104258537</span>
-<span class="n">z2</span> <span class="o">=</span> <span class="mf">0.10217590294778345</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fx</span> <span class="o">=</span> <span class="mf">0.2101</span>
+<span class="n">z1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.01991012930870084</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="mf">1.7509844067692764</span>
 </pre></div>
 </div>
 <p>You can see that we will get the same values as the correct answer data in <code class="docutils literal notranslate"><span class="pre">ref.txt</span></code>.</p>
@@ -223,7 +167,7 @@ In the current case, the following result will be obtained:</p>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2020-, Institute for Solid State Physics, University of Tokyo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

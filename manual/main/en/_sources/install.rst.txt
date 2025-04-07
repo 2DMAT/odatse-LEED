@@ -5,16 +5,16 @@ Prerequisites
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - Python3 (>=3.9)
 
-  - The following Python packages are required.
+- The following Python packages are required.
 
-    - numpy >= 1.14
-    - pydantic >= 2.0
+  - numpy >= 1.14
+  - pydantic >= 2.0
+  - fortranformat
+  - ODAT-SE >= 3.0
 
-  - ODAT-SE version 3.0 and later
+- SATLEED
 
-  - SATLEED
-
-    - A Fortran compiler is required for compilation.
+  - A Fortran compiler is required for compilation.
 
 
 How to download and install
@@ -39,33 +39,20 @@ How to download and install
 
      You may add ``--user`` option to install ODAT-SE locally (in ``$HOME/.local``).
 
+     .. note::
+        For Python versions below 3.7, you will get the following error. Please use Python 3.9 or higher for this package.
+
+        .. code-block:: bash
+
+           Directory '.' is not installable. File 'setup.py' not found.
+
      If you run the following command instead, optional packages will also be installed at the same time.
 
      .. code-block:: bash
 
 	$ python3 -m pip install .[all]
 
-2. Install SATLEED
-
-   - The source archive is available from the following URL.
-
-     .. code-block:: bash
-
-        $ wget http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip
-
-   - Unpack the source package, and compile the source.
-
-     It is necessary to modify parameters in the source files of ``SATLEED`` according to the details of the system under consideration.
-     For the present tutorial, a script ``setup.sh`` is prepared that automatically modifies the parameters and compile the source files.
-
-     .. code-block:: bash
-
-	$ cd sample/mapper
-	$ sh ./setup.sh
-
-     By running ``setup.sh``, the executable files ``satl1.exe`` and ``satl2.exe`` will be generated in ``leedsatl`` directory.
-     
-3. Install odatse-LEED
+2. Install odatse-LEED
 
    - From source files:
 
@@ -73,13 +60,36 @@ How to download and install
 
      .. code-block:: bash
 
-	$ git clone https://github.com/2DMAT/odatse-LEED.git
-	$ cd ODAT-SE
-	$ python3 -m pip install .
+        $ cd ../
+        $ git clone https://github.com/2DMAT/odatse-LEED.git
+        $ cd odatse-LEED
+        $ python3 -m pip install .
 
      You may add ``--user`` option to install the package locally (in ``$HOME/.local``).
-
      Then, the library of odatse-LEED and the command ``odatse-LEED`` wil be installed.
+
+3. Install SATLEED
+
+   - The source archive is available from the following URL.
+
+     .. code-block:: bash
+
+         http://www.icts.hkbu.edu.hk/VanHove_files/leed/leedsatl.zip
+
+     Unpack the source package, and compile the source.
+
+   - ``SATLEED`` requires modifying source code parameters according to the details of the system you want to calculate.
+     The source files of odatse-LEED include ``leedsatl.patch`` for modifying the source code and ``setup.sh`` script for automatic compilation in the ``sample/satleed`` directory. 
+     You can use these files to install SATLEED.
+
+     .. code-block:: bash
+
+         $ cd odatse-LEED/sample/satleed
+         $ sh ./setup.sh
+
+     By running ``setup.sh``, the executable files ``satl1.exe`` and ``satl2.exe`` will be generated in the current directory.
+
+     You may edit ``setup.sh`` to use other compilers or to apply different compiler options.
 
 
 How to run
@@ -94,7 +104,7 @@ There are two ways to do analyses of LEED:
 2. Write a program for the analysis with odatse-LEED library and ODAT-SE framework.
    The type of the inverse problem algorithms can be chosen by importing the appropriate module.
    A flexible use would be possible, for example, to include data generation within the program.
-   
+
 The types of parameters and the instruction to use the library will be given in the subsequent sections.
 
 
