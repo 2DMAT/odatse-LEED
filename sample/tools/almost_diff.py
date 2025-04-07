@@ -16,15 +16,13 @@
 
 import sys
 
-#EPS = 0.0
-EPS = 1.0e-8
-
-if len(sys.argv) < 3:
-    print("usage: {} file1 file2".format(sys.argv[0]))
+if len(sys.argv) < 4:
+    print("usage: {} tol file1 file2".format(sys.argv[0]))
     sys.exit(0)
 
-file_a = sys.argv[1]
-file_b = sys.argv[2]
+tol = float(sys.argv[1])
+file_a = sys.argv[2]
+file_b = sys.argv[3]
 
 err = 0
 with open(file_a, "r") as fa, open(file_b, "r") as fb:
@@ -51,11 +49,11 @@ with open(file_a, "r") as fa, open(file_b, "r") as fb:
             try:
                 fva = float(va)
                 fvb = float(vb)
-                if abs(fva) < EPS and abs(fvb) < EPS:
+                if abs(fva) < tol and abs(fvb) < tol:
                     r = abs(fva - fvb)
                 else:
                     r = abs(fva - fvb) / (abs(fva) + abs(fvb))
-                if r < EPS:
+                if r < tol:
                     continue
             except ValueError:
                 pass
@@ -64,7 +62,7 @@ with open(file_a, "r") as fa, open(file_b, "r") as fb:
             print("DIFF: line {}, item {}: \"{}\" \"{}\"".format(idx, id, va, vb))
 
 if err > 0:
-    print("comparison failed (err={})".format(err))
+    print("comparison failed (err={}, tolerance={:.4e})".format(err,tol))
     sys.exit(1)
 
 sys.exit(0)

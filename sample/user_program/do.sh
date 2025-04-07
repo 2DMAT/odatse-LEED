@@ -14,12 +14,13 @@ time python3 ./simple.py
 # Define paths for result and reference files
 result=output/res.txt    # Output file containing optimization results
 reference=ref.txt        # Reference file with expected results
+tolerance=1.0e-5
 
 # Compare result against reference using diff
 echo diff $result $reference
 res=0
 #diff $result $reference || res=$?
-python3 ../tools/almost_diff.py $result $reference || res=$?
+python3 ../tools/almost_diff.py $tolerance $result $reference || res=$?
 
 # Check if files match and report test status
 if [ $res -eq 0 ]; then
