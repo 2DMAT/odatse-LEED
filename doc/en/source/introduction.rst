@@ -54,7 +54,7 @@ Version Information
 
 odatse-LEED
 
-- v1.0.0: 2025-04-07
+- v1.0.0: 2025-04-11
 - v1.0-alpha: 2024-11-25
 
 ODAT-SE
