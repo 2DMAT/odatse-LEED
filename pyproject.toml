@@ -14,7 +14,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9"
-numpy = "^1.14"
+numpy = ">=1.14"
 pydantic = "^2"
 fortranformat = "^2"
 ODAT-SE = "^3"
